@@ -10,10 +10,10 @@ let dataunsave = tg.initDataUnsafe
 order.addEventListener("click", () => {
 
     console.log("Init data above")
-    let price = document.getElementById("price").value
+    let count = document.getElementById("count").value
     let code = document.getElementById("code").value
     let data = {
-        price: price,
+        count: count,
         code: code
     }
     tg.sendData(JSON.stringify(data))
