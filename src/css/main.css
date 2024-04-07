@@ -1,0 +1,220 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    align-self: center;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    color: var(--tg-theme-text-color);
+    background: var(--tg-theme-bg-color);
+}
+
+#main {
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+}
+
+#form {
+    display: none;
+    text-align: center;
+}
+
+h1 {
+    margin-top: 50px;
+    margin-bottom: 10px;
+    color: rgb(243, 180, 104);
+}
+
+h2 {
+    align-self: center;
+    margin-top: 50px;
+    margin-bottom: 10px;
+    color: rgb(243, 180, 104);
+}
+
+input {
+    width: 20%;
+    outline: none;
+    margin: 10px 5px;
+    padding: 15px 10px;
+    font-size: 14px;
+    border: 2px solid silver;
+    border-radius: 5px;
+}
+
+input:focus {
+    border-color: #db5d5d;
+}
+
+#main button, .cartButton {
+    border: 0;
+    border-radius: 5px;
+    margin-top: 50px;
+    height: 60px;
+    width: 200px;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 500ms ease;
+    color: var(--tg-theme-button-color);
+    background-color: var(--tg-theme-button-text-color);
+    background-color: antiquewhite;
+}
+
+/*
+#shop button {
+    
+    border: 0;
+    border-radius: 5px;
+    margin-top: 5px;
+    height: auto + 5px;
+    width: auto + 5px;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 500ms ease;
+    color: var(--tg-theme-button-color);
+    background-color: var(--tg-theme-button-text-color);
+    background-color: beige;
+}
+
+button:hover , #shop button:hover {
+    background: none;
+}
+*/
+
+#shop {
+    width: 100%;
+    text-align: center;
+}
+
+.cartButton {
+    border-radius: 1px;
+}
+
+.catalogue {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    /* background-color: red; */
+}
+
+.item {
+    position: relative; /* Позиционирование элемента */
+    border-radius: 12px;
+    width: 45vw; /* Уменьшил ширину элементов, чтобы поместилось 2 в строку */
+    max-width: 90%;
+    height: 60vw;
+    max-height: 90vh; /* Уменьшил максимальную высоту для удобства просмотра */
+    padding: 5px;
+    margin: 10px;
+    background-color: #ccc;
+}
+
+.item img{
+    vertical-align: top; 
+    max-width: 90%; 
+    max-height: 80%; 
+    border-radius: 10px;
+}
+
+.item:nth-child(2n) {
+    background-color: beige;
+    margin-right: 0; /* Убрал правый отступ для каждого второго элемента */
+}
+
+.item:nth-child(odd) {
+    background-color: beige;
+    /* margin-right: 100px;  Добавил правый отступ для нечетных элементов */
+}
+
+asdf item::before {
+    content: ''; /* Добавляем пустое содержимое для псевдоэлемента */
+    border-radius: 12px;
+    position: absolute; /* Абсолютное позиционирование */
+    top: 0; /* Выравнивание по верхнему краю */
+    left: 0; /* Выравнивание по левому краю */
+    width: 100%; /* Ширина равна ширине родительского элемента */
+    height: 100%; /* Высота равна высоте родительского элемента */
+    background-color: rgba(0, 0, 0, 0.4); /* Цвет фона с прозрачностью */
+    opacity: 0; /* Начальная прозрачность */
+    transition: opacity 0.3s; /* Плавное изменение прозрачности */
+}
+
+.item:hover::before {
+    border-radius: 12px;
+    opacity: 1; /* Увеличение прозрачности при наведении */
+}
+
+.item:nth-child(3n) {
+    flex-basis: 100%;
+}
+
+.cartButton {
+    position: fixed; /* Фиксированное позиционирование */
+    left: 0; /* Выравнивание по левому краю */
+    bottom: 0; /* Располагается внизу видимой области экрана */
+    width: 100%; /* Ширина занимает всю доступную ширину экрана */
+    background-color: bisque; /* Цвет фона футера */
+    padding: 10px; /* Поля для контента футера */
+    text-align: center; /* Выравнивание текста по центру */
+}
+.cartButton:hover {
+    background-color: rgb(247, 182, 103);
+}
+
+.removeButton,
+.addButton {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+.removeButton:hover,
+.addButton:hover {
+    background-color: #45a049;
+}
+
+#cartContent {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#cartContent th, #cartContent td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#cartContent th {
+    background-color: #f2f2f2;
+}
+
+#cartContent tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#cartContent tr:hover {
+    background-color: #ddd;
+}

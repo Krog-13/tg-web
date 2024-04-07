@@ -1,4 +1,3 @@
-# Telegram-bot Web app page
-Native JS
+Web app for telegram bot
 
-- sudo service nginx reload
+https://krog-13.github.io/
