@@ -117,7 +117,7 @@ button:hover , #shop button:hover {
     border-radius: 12px;
     width: 45vw; /* Уменьшил ширину элементов, чтобы поместилось 2 в строку */
     max-width: 90%;
-    height: 60vw;
+    height: 68vw;
     max-height: 90vh; /* Уменьшил максимальную высоту для удобства просмотра */
     padding: 5px;
     margin: 10px;
@@ -181,14 +181,14 @@ asdf item::before {
     background-color: #4CAF50; /* Green */
     border: none;
     color: white;
-    padding: 10px 20px;
+    padding: 8px 16px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
-    border-radius: 12px;
+    border-radius: 16px;
 }
 
 .removeButton:hover,

@@ -79,10 +79,12 @@ for (let i = 0; i < config.length; i++) {
         <p> ${item.name} </p>
         <span> ${item.price} тг </span>
         <p style="vertical-align: bottom;">
-            <button class="removeButton" data-id="${item.productID}"> - </button> 
+            
             В Корзине: <span id="quantity-${item.productID}"> 0 </span> 
-            <button class="addButton" data-id="${item.productID}"> + </button>
+            
         </p>
+        <button class="removeButton" data-id="${item.productID}"> - </button> 
+        <button class="addButton" data-id="${item.productID}"> + </button>
     `;
 
     let removeButton = itemDiv.querySelector('.removeButton');
@@ -179,7 +181,7 @@ cartButton.addEventListener("click", function(){
 function UpdateCartTable(){
     const cartContent = document.querySelector('#cartContent tbody');
     cartContent.innerHTML = "";
-    
+
     cart.forEach(cartItem => {
         const product = config.find(product => product.productID === cartItem.productID);
         const row = document.createElement('tr');
