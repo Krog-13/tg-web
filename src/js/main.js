@@ -38,7 +38,34 @@ const config = [
     
 ];
 
-;
+let orders = document.getElementById("update")
+orders.addEventListener("click", () => {
+    console.log("update data")
+    let url = 'https://krog-dev.kz/product'
+    const options = {
+        method: 'GET', // Change method to GET
+        headers: {
+          // Add any headers you need
+        },
+      };
+
+    fetch(url, options)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parse the response body as JSON
+      })
+      .then(data => {
+        // Handle the response data here
+        console.log(data);
+      })
+      .catch(error => {
+        // Handle errors here
+        console.error('There was a problem with the fetch operation:', error);
+      });
+})
+
 
 let map = {}
 let cart = []
