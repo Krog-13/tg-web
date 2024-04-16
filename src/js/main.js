@@ -38,6 +38,7 @@ const config = [
     
 ];
 
+/*
 let orders = document.getElementById("update")
 orders.addEventListener("click", () => {
     console.log("update data")
@@ -64,7 +65,7 @@ orders.addEventListener("click", () => {
         // Handle errors here
         console.error('There was a problem with the fetch operation:', error);
       });
-})
+}) */
 
 
 let map = {}
@@ -208,6 +209,10 @@ cartButton.addEventListener("click", function(){
 function UpdateCartTable(){
     const cartContent = document.querySelector('#cartContent tbody');
     cartContent.innerHTML = "";
+    let cartDiv = document.getElementById("cartDiv");
+    cartDiv.innerHTML = "<h1>Ваш заказ:</h1>";
+
+    
 
     cart.forEach(cartItem => {
         const product = config.find(product => product.productID === cartItem.productID);
@@ -219,12 +224,52 @@ function UpdateCartTable(){
             <td>${product.price * cartItem.quantity} тг</td>
         `;
         cartContent.appendChild(row);
-    });
 
+        //const product = config.find(product => product.productID === cartItem.productID);
+        const cartItemDiv = document.createElement('div');
+        cartItemDiv.className = "cart-item";
+        cartItemDiv.innerHTML = `
+            <img src="${product.image_src}" alt="Товар">
+            <div class="item-details">
+                <h3>${product.name}</h3>
+                <p>${product.price}</p>
+            </div>
+            <div class="quantity-control">
+                <button class="removeButton" data-id="${product.productID}">-</button>
+                <span>${cartItem.quantity}</span>
+                <button class="addButton" data-id="${product.productID}">+</button>
+            </div>
+        `;
+        
+        let removeButton = cartItemDiv.querySelector('.removeButton');
+        let addButton = cartItemDiv.querySelector('.addButton');
+    
+        addButton.addEventListener('click', function(){
+            const productId = this.getAttribute('data-id');
+            const index = map[productId];
+            cart[index].quantity++;
+            document.getElementById(`quantity-${productId}`).innerText = cart[index].quantity;
+            updateCartTotal(product.price);
+            UpdateCartTable()
+        });
+    
+        removeButton.addEventListener('click', function(){
+            const productId = this.getAttribute('data-id');
+            const index = map[productId];
+            if (cart[index].quantity > 0) {
+                cart[index].quantity--;
+                document.getElementById(`quantity-${productId}`).innerText = cart[index].quantity;
+                updateCartTotal(- product.price);
+                UpdateCartTable()
+            }
+        });
+        cartDiv.appendChild(cartItemDiv);
+    });
     const cartTotal = cart.reduce((total, cartItem) => {
         const product = config.find(product => product.productID === cartItem.productID);
         return total + (product.price * cartItem.quantity);
     }, 0);
+    //console.log(cartTotal);
     document.getElementById('cartTotal').textContent = cartTotal + ' тг';
 };
 

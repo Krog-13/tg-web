@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopping Cart</title>
+</head>
+<body>
+
+
+
+<script>
+const config = [
+    {
+        productID: 101,
+        name: "Egor",
+        price: 300
+    },
+    {
+        productID: 102,
+        name: "Ulyana",
+        price: 1000
+    },
+    {
+        productID: 103,
+        name: "Новогодняя Мегумин!",
+        price: 150000
+    },
+    {
+        productID: 104,
+        name: "Андроид!",
+        price: 100
+    },
+    {
+        productID: 105,
+        name: "Лекции по физике",
+        price: 20
+    },
+    {
+        productID: 106,
+        name: "Забыл что тут должно быть",
+        price: 1234
+    }
+];
+
+const cart = [];
+
+// Добавить продукты в корзину
+for (let i = 0; i < config.length; i++) {
+    const item = config[i];
+    cart.push({
+        productID: item.productID,
+        quantity: Math.floor(Math.random() * 5) // Случайное количество продуктов (от 0 до 4)
+    });
+}
+
+// Получить тело таблицы для корзины
+const cartContent = document.querySelector('#cartContent tbody');
+
+// Отобразить содержимое корзины
+cart.forEach(cartItem => {
+    const product = config.find(product => product.productID === cartItem.productID);
+    const row = document.createElement('tr');
+    row.innerHTML = `
+        <td>${product.name}</td>
+        <td>${product.price} тг</td>
+        <td>${cartItem.quantity}</td>
+        <td>${product.price * cartItem.quantity} тг</td>
+    `;
+    cartContent.appendChild(row);
+});
+
+// Отобразить итоговую сумму корзины
+const cartTotal = cart.reduce((total, cartItem) => {
+    const product = config.find(product => product.productID === cartItem.productID);
+    return total + (product.price * cartItem.quantity);
+}, 0);
+document.getElementById('cartTotal').textContent = cartTotal + ' тг';
+</script>
+</body>
+</html>

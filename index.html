@@ -7,8 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="src/css/main.css">
+    <!-- 
     <link rel="stylesheet" href="src/css/shop.css">
     <link rel="stylesheet" href="src/css/cart.css">
+    -->
     <title>Test aiogram bot</title>
 </head>
 <body>
@@ -18,8 +20,6 @@
         <img src="src/images/lepp.jpg" alt="dior" width="500"><br>
         
     </div>
-    <h4>test</h4>
-    <button id="update">UPDATE</button>
     <div id = "shop">
         <h1> Каталог товаров </h1>
         <div class="catalogue">
@@ -61,6 +61,7 @@
         <!-- <script src="src/js/shop.js"></script> -->
     </div>
     <button class="cartButton"> Корзина: <span id="cartSum">0</span> тг {временно: оформить заказ}</button>
+    <!-- <button id="update"> UPDATE! </button> -->
     <!-- <input type="text" placeholder="address" id="myname"><br> -->
     <form id="form">
         <input type="text" placeholder="address" id="address" value="Astana"><br>
@@ -69,7 +70,7 @@
         <button id="order">Submit</button>
     </form>
 
-    <table id="cartContent">
+    <table id="cartContent" style="display: none;">
         <thead>
             <tr>
                 <th>Название</th>
@@ -86,6 +87,8 @@
             </tr>
         </tfoot>
     </table>
+
+    <div id="cartDiv"></div>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="src/js/main.js"></script>
