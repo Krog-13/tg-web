@@ -38,10 +38,26 @@ const config = [
     
 ];
 
+function hideElement(element) {
+    if (element) {
+        element.style.display = "none";
+    } else {
+        console.error("Element is null or undefined.");
+    }
+}
+
+function showElement(element) {
+    if (element) {
+        element.style.display = "block";
+    } else {
+        console.error("Element is null or undefined.");
+    }
+}
+
 /*
 let orders = document.getElementById("update")
 orders.addEventListener("click", () => {
-    console.log("update data")
+    //console.log("update data")
     let url = 'https://krog-dev.kz/product'
     const options = {
         method: 'GET', // Change method to GET
@@ -59,7 +75,7 @@ orders.addEventListener("click", () => {
       })
       .then(data => {
         // Handle the response data here
-        console.log(data);
+        //console.log(data);
       })
       .catch(error => {
         // Handle errors here
@@ -88,6 +104,12 @@ function changeSelectedItem(ProductIndex){
     selectedItemImageElement.src = config[ProductIndex].image_src;
 }
 
+function updateShowcaseSumSpan(price, quantity){
+    showcaseSumSpan = document.getElementById("showcaseSumSpan");
+
+    showcaseSumSpan.textContent = (price * quantity);
+}
+
 let catalogueDiv = document.getElementsByClassName("catalogue")[0];
 
 for (let i = 0; i < config.length; i++) {
@@ -101,9 +123,11 @@ for (let i = 0; i < config.length; i++) {
     });
 
     var itemDiv = document.createElement('div');
+    
+    //itemDiv.setAttribute("data-id", item.productID);
     itemDiv.className = "item";
     itemDiv.innerHTML = `
-        <img src="${item.image_src}">
+        <img src="${item.image_src}" class="imgButton" data-id="${item.productID}">
         <p> ${item.name} </p>
         <span> ${item.price} тг </span>
         <p style="vertical-align: bottom;">
@@ -117,6 +141,7 @@ for (let i = 0; i < config.length; i++) {
 
     let removeButton = itemDiv.querySelector('.removeButton');
     let addButton = itemDiv.querySelector('.addButton');
+    let imgButton = itemDiv.querySelector('.imgButton');
 
     addButton.addEventListener('click', function(){
         const productId = this.getAttribute('data-id');
@@ -138,9 +163,81 @@ for (let i = 0; i < config.length; i++) {
         }
     });
 
+    imgButton.addEventListener('click', function(){
+        hideElement(document.getElementById("mainshop"));
+        hideElement(document.getElementById("cartButton"));
+        showElement(document.getElementById("showcase"));
+        showElement(document.getElementById("showcaseAddToCartButton"));
+
+        const productId = this.getAttribute('data-id');
+        const index = map[productId];
+        let showcaseTitle = document.getElementById('showcaseTitleH1');
+        showcaseTitle.textContent = config[index].name;
+        let showcaseImage = document.getElementById('showcaseImage');
+        showcaseImage.src = config[index].image_src;
+        let showcaseDescription = document.getElementById('showcaseDescription');
+        //showcaseDescription.src = config[index].name;
+        showcaseDescription.src = "Опсание товара";
+        let showcaseRemoveButton = document.getElementById('showcaseRemoveButton');
+        showcaseRemoveButton.setAttribute("data-id", item.productID);
+        //showcaseRemoveButton.removeEventListener("click");
+        let showcaseAddButton = document.getElementById('showcaseAddButton');
+        showcaseAddButton.setAttribute("data-id", item.productID);
+
+        showcaseAddToCartButton.setAttribute("data-id", item.productID);
+        //showcaseAddButton.removeEventListener("click");
+    });
+
     catalogueDiv.appendChild(itemDiv);
 }
 
+document.getElementById('showcaseRemoveButton').addEventListener('click', function(){
+    showcaseQuantitySpan = document.getElementById("showcaseQuantitySpan");
+    let q = parseInt(showcaseQuantitySpan.textContent);
+    if(q <= 0) q = 0; else q--;
+    showcaseQuantitySpan.textContent = q;        
+
+    const productId = this.getAttribute('data-id');
+    const index = map[productId];
+    document.getElementById('showcaseAddToCartButton').setAttribute("data-q", q);
+    updateShowcaseSumSpan(config[index].price, q);
+});
+
+document.getElementById('showcaseAddButton').addEventListener('click', function(){
+    showcaseQuantitySpan = document.getElementById("showcaseQuantitySpan");
+    let q = parseInt(showcaseQuantitySpan.textContent);
+    q++;
+    showcaseQuantitySpan.textContent = q;
+
+    const productId = this.getAttribute('data-id');
+    const index = map[productId];
+    updateShowcaseSumSpan(config[index].price, q);
+    document.getElementById('showcaseAddToCartButton').setAttribute("data-q", q);
+});
+
+function backToShopMethod(){
+    hideElement(document.getElementById("cartDiv"));
+    hideElement(document.getElementById("showcase"));
+    showElement(document.getElementById("mainshop"));
+    showElement(document.getElementById("cartButton"));
+    hideElement(document.getElementById("showcaseAddToCartButton"));
+
+    document.getElementById('showcaseAddToCartButton').setAttribute("data-id", -1);
+    document.getElementById('showcaseAddToCartButton').setAttribute("data-q", -1);
+
+    updateShowcaseSumSpan(0, 0);
+    document.getElementById("showcaseQuantitySpan").textContent = 0;
+}
+
+document.getElementById('showcaseAddToCartButton').addEventListener('click', function(){
+    const productId = this.getAttribute('data-id');
+    const index = map[productId];
+    const q = this.getAttribute('data-q');
+    cart[index].quantity = parseInt(cart[index].quantity) + parseInt(q);
+    //console.log(cart);
+    backToShopMethod();
+    UpdateCartTable();
+});
 
 //image_src = "assets/images/dendi/pic1.jpg";
 let tg = window.Telegram.WebApp;
@@ -157,12 +254,12 @@ buy.addEventListener("click", () => {
 });
 */
 
-let initdata = tg.initData
-let dataunsave = tg.initDataUnsafe
+let initdata = tg.initData;
+let dataunsave = tg.initDataUnsafe;
 
-let cartButton = document.getElementsByClassName("cartButton")[0];
+let orderButton = document.getElementById("orderButton");
 
-cartButton.addEventListener("click", function(){
+orderButton.addEventListener("click", function(){
     console.log("Init data above")
     console.log(initdata)
     console.log(dataunsave)
@@ -203,17 +300,23 @@ cartButton.addEventListener("click", function(){
         cartContent.appendChild(itemDiv);
     });
     */
-    
 });
+
+document.getElementById("registrationFormButton").addEventListener("submit", orderButton);
+
 
 function UpdateCartTable(){
     const cartContent = document.querySelector('#cartContent tbody');
     cartContent.innerHTML = "";
     let cartDiv = document.getElementById("cartDiv");
-    cartDiv.innerHTML = "<h1>Ваш заказ:</h1>";
-
-    
-
+    //cartDiv.innerHTML = "<h1>Ваш заказ:</h1>";
+    cartDiv.innerHTML = `
+<div id="cartDivTitle">
+    <button style="font-size: 20px;" id="cartBackToShopButton">&#129044;</button>
+    <h1 id="cartTitleH1"> Ваш заказ: </h1>
+</div>
+`;
+    /*
     cart.forEach(cartItem => {
         const product = config.find(product => product.productID === cartItem.productID);
         const row = document.createElement('tr');
@@ -224,53 +327,91 @@ function UpdateCartTable(){
             <td>${product.price * cartItem.quantity} тг</td>
         `;
         cartContent.appendChild(row);
-
-        //const product = config.find(product => product.productID === cartItem.productID);
-        const cartItemDiv = document.createElement('div');
-        cartItemDiv.className = "cart-item";
-        cartItemDiv.innerHTML = `
-            <img src="${product.image_src}" alt="Товар">
-            <div class="item-details">
-                <h3>${product.name}</h3>
-                <p>${product.price}</p>
-            </div>
-            <div class="quantity-control">
-                <button class="removeButton" data-id="${product.productID}">-</button>
-                <span>${cartItem.quantity}</span>
-                <button class="addButton" data-id="${product.productID}">+</button>
-            </div>
-        `;
-        
-        let removeButton = cartItemDiv.querySelector('.removeButton');
-        let addButton = cartItemDiv.querySelector('.addButton');
-    
-        addButton.addEventListener('click', function(){
-            const productId = this.getAttribute('data-id');
-            const index = map[productId];
-            cart[index].quantity++;
-            document.getElementById(`quantity-${productId}`).innerText = cart[index].quantity;
-            updateCartTotal(product.price);
-            UpdateCartTable()
-        });
-    
-        removeButton.addEventListener('click', function(){
-            const productId = this.getAttribute('data-id');
-            const index = map[productId];
-            if (cart[index].quantity > 0) {
-                cart[index].quantity--;
-                document.getElementById(`quantity-${productId}`).innerText = cart[index].quantity;
-                updateCartTotal(- product.price);
-                UpdateCartTable()
-            }
-        });
-        cartDiv.appendChild(cartItemDiv);
     });
+    */
+
+    if(cart.some(cartItem => cartItem.quantity !== 0)){
+        cart.forEach(cartItem => {
+            //const product = config.find(product => product.productID === cartItem.productID);
+            const product = config.find(product => product.productID === cartItem.productID);
+            const cartItemDiv = document.createElement('div');
+
+            if(cartItem.quantity === 0){
+                return;
+            }
+
+            cartItemDiv.className = "cart-item";
+            cartItemDiv.innerHTML = `
+                <img src="${product.image_src}" alt="Товар">
+                <div class="item-details">
+                    <h3>${product.name}</h3>
+                    <p>${product.price} тг</p>
+                </div>
+                <div class="quantity-control">
+                    <button class="removeButton" data-id="${product.productID}">-</button>
+                    <span>${cartItem.quantity}</span>
+                    <button class="addButton" data-id="${product.productID}">+</button>
+                </div>
+            `;
+            
+            let removeButton = cartItemDiv.querySelector('.removeButton');
+            let addButton = cartItemDiv.querySelector('.addButton');
+        
+            addButton.addEventListener('click', function(){
+                const productId = this.getAttribute('data-id');
+                const index = map[productId];
+                cart[index].quantity++;
+                document.getElementById(`quantity-${productId}`).innerText = cart[index].quantity;
+                updateCartTotal(product.price);
+                UpdateCartTable()
+            });
+        
+            removeButton.addEventListener('click', function(){
+                const productId = this.getAttribute('data-id');
+                const index = map[productId];
+                if (cart[index].quantity > 0) {
+                    cart[index].quantity--;
+                    document.getElementById(`quantity-${productId}`).innerText = cart[index].quantity;
+                    updateCartTotal(- product.price);
+                    UpdateCartTable()
+                }
+            });
+            cartDiv.appendChild(cartItemDiv);
+        });
+    }
+    else{
+        let asdf = document.createElement('h2');
+        asdf.textContent = "В корзине ничего нет!";
+        cartDiv.appendChild(asdf);
+    }
+
+    document.getElementById("cartBackToShopButton").addEventListener('click', function(){
+        hideElement(document.getElementById("cartDiv"));
+        hideElement(document.getElementById("showcase"));
+        showElement(document.getElementById("mainshop"));
+    });
+
     const cartTotal = cart.reduce((total, cartItem) => {
         const product = config.find(product => product.productID === cartItem.productID);
         return total + (product.price * cartItem.quantity);
     }, 0);
+
     //console.log(cartTotal);
     document.getElementById('cartTotal').textContent = cartTotal + ' тг';
+    document.getElementById('cartSum').textContent = cartTotal;
 };
 
+document.getElementById("showcaseBackToShopButton").addEventListener('click', backToShopMethod);
+
+document.getElementById("cartButton").addEventListener('click', function(){
+    hideElement(document.getElementById("showcase"));;
+    showElement(document.getElementById("cartDiv"));
+    hideElement(document.getElementById("mainshop"));
+});
+
 UpdateCartTable()
+
+hideElement(document.getElementById("showcase"));
+hideElement(document.getElementById("cartDiv"));
+hideElement(document.getElementById("showcaseAddToCartButton"));
+hideElement(document.getElementById("mainshop"));

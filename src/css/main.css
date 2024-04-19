@@ -21,9 +21,14 @@ body {
     background: var(--tg-theme-bg-color);
 }
 
+#main img{
+    padding: 0px 10px 10px 10px;
+    border-radius: 30px;
+}
+
 #main {
     width: 100%;
-    padding: 20px;
+    padding: 10px;
     text-align: center;
 }
 
@@ -35,7 +40,7 @@ body {
 h1 {
     margin-top: 20px;
     margin-bottom: 10px;
-    color: rgb(243, 180, 104);
+    color: #EFBC9B;
     text-align: center;
 }
 
@@ -60,11 +65,11 @@ input:focus {
     border-color: #db5d5d;
 }
 
-#main button, .cartButton {
+#main button, .bottomButton {
     border: 0;
     border-radius: 5px;
     margin-top: 50px;
-    height: 60px;
+    height: 10vh;
     width: 200px;
     font-size: 20px;
     font-weight: 500;
@@ -102,7 +107,7 @@ button:hover , #shop button:hover {
     text-align: center;
 }
 
-.cartButton {
+.bottomButton{
     border-radius: 1px;
 }
 
@@ -118,7 +123,7 @@ button:hover , #shop button:hover {
     border-radius: 12px;
     width: 45vw; /* Уменьшил ширину элементов, чтобы поместилось 2 в строку */
     max-width: 90%;
-    height: 68vw;
+    height: 38vh;
     max-height: 90vh; /* Уменьшил максимальную высоту для удобства просмотра */
     padding: 5px;
     margin: 10px;
@@ -164,7 +169,7 @@ asdf item::before {
     flex-basis: 100%;
 }
 
-.cartButton {
+.bottomButton {
     position: fixed; /* Фиксированное позиционирование */
     left: 0; /* Выравнивание по левому краю */
     bottom: 0; /* Располагается внизу видимой области экрана */
@@ -173,7 +178,7 @@ asdf item::before {
     padding: 10px; /* Поля для контента футера */
     text-align: center; /* Выравнивание текста по центру */
 }
-.cartButton:hover {
+.bottomButton:hover {
     background-color: rgb(247, 182, 103);
 }
 
@@ -243,11 +248,11 @@ asdf item::before {
 .quantity-control {
     display: flex;
     align-items: center;
-    
+    padding: 0px 0px 15px 0px;  
 }
 
 .quantity-control button {
-    padding: 6px;
+    padding: 6px 6px 6px 6px;
     width: 25px;
     border: none;
     background-color: #eee;
@@ -261,6 +266,67 @@ asdf item::before {
     width: 25px;
     padding: 5px;
     text-align: center;
-    border: 1px solid #ccc;
     border-radius: 5px;
+}
+
+#showcase {
+    padding: 20px;
+}
+
+#showcase img{
+    border-radius: 20px;
+}
+
+#showcase h3{
+    padding: 0px 0px 15px 0px;
+}
+
+.model-container {
+    padding: 0px 0px 15px 0px;
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.model-scroll {
+    display: flex;
+}
+
+.model-scroll button {
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#showcaseSumDiv {
+    border: 2px solid #000;
+    border-radius: 10px; /* Округленные углы */
+    padding: 10px; /* Пространство вокруг текста */
+    display: inline-block; 
+
+}
+
+#showcaseSum {
+    font-size: 18px; /* Размер шрифта */
+}
+
+#showcaseTitle button, #cartDivTitle button{
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff6b6b; /* Красный цвет кнопки */
+    color: #fff; /* Белый цвет текста */
+    text-transform: uppercase; /* Преобразование текста в верхний регистр */
+    font-weight: bold; /* Жирный шрифт */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Плавное изменение цвета фона */
+}
+
+#cartBackToShopButton {
+    margin: 10px;
 }
