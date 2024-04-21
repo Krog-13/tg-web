@@ -61,7 +61,7 @@ function getData(){
         })
         .then(data => {
             // Handle the response data here
-            fetchedFileData = data;
+            updateProducts(data);
             console.log(data);
         })
         .catch(error => {
@@ -70,8 +70,8 @@ function getData(){
         });
 }
 
-function updateProducts(){
-    fetchedFileData = getData();
+function updateProducts(data){
+    fetchedFileData = data;
     console.log(fetchedFileData);
 
     for(let i = 0; i < fetchedFileData['products'].length; i++){
@@ -142,10 +142,9 @@ fetchedFileData = {
 }
 */
 
+/*
 let config = [];
-
 let catalogueDiv = document.getElementsByClassName("catalogue")[0];
-
 function catalogueDivAddItem(item, i){
     console.log(`Name: ${item.name}, Price: ${item.price}`);
 
@@ -223,9 +222,6 @@ function catalogueDivAddItem(item, i){
 
     catalogueDiv.appendChild(itemDiv);
 }
-
-updateProducts();
-
 console.log(fetchedFileData);
 
 for(let i = 0; i < fetchedFileData['products'].length; i++){
@@ -249,6 +245,7 @@ for (let i = 0; i < config.length; i++) {
 }
 
 console.log(config);
+*/
 
 function hideElement(element) {
     if (element) {
