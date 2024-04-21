@@ -67,7 +67,7 @@ function updateProducts(){
         console.error('There was a problem with the fetch operation:', error);
       });
 }
-updateProducts();
+
 /*
 fetchedFileData = {
     "products": [
@@ -115,22 +115,30 @@ fetchedFileData = {
 
 let config = [];
 
-for(let i = 0; i < fetchedFileData['products'].length; i++){
-    let rootItem = fetchedFileData['products'][i];
+updateProducts().then(function(){
+    for(let i = 0; i < fetchedFileData['products'].length; i++){
+        let rootItem = fetchedFileData['products'][i];
 
-    for(let j = 0; j < rootItem['models'].length; j++){
-        curModel = rootItem['models'][j];   
-        let item = {
-            productID: curModel['id'],
-            name: curModel['model'],
-            price: curModel['price'],
-            image_src: curModel['photo_path']
+        for(let j = 0; j < rootItem['models'].length; j++){
+            curModel = rootItem['models'][j];   
+            let item = {
+                productID: curModel['id'],
+                name: curModel['model'],
+                price: curModel['price'],
+                image_src: curModel['photo_path']
+            }
+            config.push(item)
         }
-        config.push(item)
     }
-}
 
+    for (let i = 0; i < config.length; i++) {
+        const item = config[i];
+        catalogueDivAddItem(item, i);
+    }
+});
 console.log(config);
+
+
 
 function hideElement(element) {
     if (element) {
@@ -252,11 +260,6 @@ function catalogueDivAddItem(item, i){
     });
 
     catalogueDiv.appendChild(itemDiv);
-}
-
-for (let i = 0; i < config.length; i++) {
-    const item = config[i];
-    catalogueDivAddItem(item, i);
 }
 
 /*
