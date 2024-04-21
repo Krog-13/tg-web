@@ -1,5 +1,6 @@
 let map = {}
 let cart = []
+let config = [];
 /*
 const config = [
     {
@@ -96,6 +97,8 @@ function updateProducts(data){
     
     console.log(config);   
 }
+
+getData();
 
 /*
 fetchedFileData = {
