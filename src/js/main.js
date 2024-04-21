@@ -43,7 +43,7 @@ const config = [
 
 let fetchedFileData = {"products": []}; 
 
-function updateProducts(){
+function getData(){
     let url = 'https://krog-dev.kz/product'
     const options = {
         method: 'GET', // Change method to GET
@@ -68,6 +68,10 @@ function updateProducts(){
             // Handle errors here
             console.error('There was a problem with the fetch operation:', error);
         });
+}
+
+function updateProducts(){
+    fetchedFileData = getData();
     console.log(fetchedFileData);
 
     for(let i = 0; i < fetchedFileData['products'].length; i++){
@@ -90,7 +94,7 @@ function updateProducts(){
         catalogueDivAddItem(item, i);
     }
     
-    console.log(config);
+    console.log(config);   
 }
 
 /*
