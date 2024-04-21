@@ -41,113 +41,9 @@ const config = [
     }  
 ];
 */
-
 let fetchedFileData = {"products": []}; 
-
-function getData(){
-    let url = 'https://krog-dev.kz/product'
-    const options = {
-        method: 'GET', // Change method to GET
-        headers: {
-          // Add any headers you need
-        },
-      };
-
-    fetch(url, options)
-        .then(response => {
-            if (!response.ok) {
-            throw new Error('Network response was not ok');
-            }
-            return response.json(); // Parse the response body as JSON
-        })
-        .then(data => {
-            // Handle the response data here
-            updateProducts(data);
-            console.log(data);
-        })
-        .catch(error => {
-            // Handle errors here
-            console.error('There was a problem with the fetch operation:', error);
-        });
-}
-
-function updateProducts(data){
-    fetchedFileData = data;
-    console.log(fetchedFileData);
-
-    for(let i = 0; i < fetchedFileData['products'].length; i++){
-        let rootItem = fetchedFileData['products'][i];
-    
-        for(let j = 0; j < rootItem['models'].length; j++){
-            curModel = rootItem['models'][j];   
-            let item = {
-                productID: curModel['id'],
-                name: curModel['model'],
-                price: curModel['price'],
-                image_src: curModel['photo_path']
-            }
-            config.push(item)
-        }
-    }
-    
-    for (let i = 0; i < config.length; i++) {
-        const item = config[i];
-        catalogueDivAddItem(item, i);
-    }
-    
-    console.log(config);   
-}
-
-getData();
-
-/*
-fetchedFileData = {
-    "products": [
-        {
-            "name": "iphone",
-            "auction": true,
-            "description": "Information about product something",
-            "models": [
-                {
-                    "model": "11",
-                    "photo_path": "bot/static/media/iphone11.jpg",
-                    "price": 12000.0,
-                    "id": 1
-                },
-                {
-                    "model": "12",
-                    "photo_path": "bot/static/media/optical.jpg",
-                    "price": 4000.0,
-                    "id": 4
-                }
-            ]
-        },
-        {
-            "name": "mouse",
-            "auction": false,
-            "description": "Information about product something",
-            "models": [
-                {
-                    "model": "optical",
-                    "photo_path": "bot/static/media/optical.jpg",
-                    "price": 4000.0,
-                    "id": 2
-                },
-                {
-                    "model": "wired",
-                    "photo_path": "bot/static/media/iphone11.jpg",
-                    "price": 12000.0,
-                    "id": 3
-                }
-            ]
-        }
-    ]
-}
-*/
-
-/*
-let config = [];
 let catalogueDiv = document.getElementsByClassName("catalogue")[0];
+
 function catalogueDivAddItem(item, i){
     console.log(`Name: ${item.name}, Price: ${item.price}`);
 
@@ -225,6 +121,112 @@ function catalogueDivAddItem(item, i){
 
     catalogueDiv.appendChild(itemDiv);
 }
+
+function getData(){
+    let url = 'https://krog-dev.kz/product'
+    const options = {
+        method: 'GET', // Change method to GET
+        headers: {
+          // Add any headers you need
+        },
+      };
+
+    fetch(url, options)
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok');
+            }
+            return response.json(); // Parse the response body as JSON
+        })
+        .then(data => {
+            // Handle the response data here
+            updateProducts(data);
+            console.log(data);
+        })
+        .catch(error => {
+            // Handle errors here
+            console.error('There was a problem with the fetch operation:', error);
+        });
+}
+
+function updateProducts(data){
+    fetchedFileData = data;
+    console.log(fetchedFileData);
+
+    for(let i = 0; i < fetchedFileData['products'].length; i++){
+        let rootItem = fetchedFileData['products'][i];
+    
+        for(let j = 0; j < rootItem['models'].length; j++){
+            curModel = rootItem['models'][j];   
+            let item = {
+                productID: curModel['id'],
+                name: curModel['model'],
+                price: curModel['price'],
+                image_src: curModel['photo_path']
+            }
+            config.push(item)
+        }
+    }
+    
+    for (let i = 0; i < config.length; i++) {
+        const item = config[i];
+        catalogueDivAddItem(item, i);
+    }
+    
+    console.log(config);   
+}
+
+
+getData();
+
+
+ManualfetchedFileData = {
+    "products": [
+        {
+            "name": "iphone",
+            "auction": true,
+            "description": "Information about product something",
+            "models": [
+                {
+                    "model": "11",
+                    "photo_path": "bot/static/media/iphone11.jpg",
+                    "price": 12000.0,
+                    "id": 1
+                },
+                {
+                    "model": "12",
+                    "photo_path": "bot/static/media/optical.jpg",
+                    "price": 4000.0,
+                    "id": 4
+                }
+            ]
+        },
+        {
+            "name": "mouse",
+            "auction": false,
+            "description": "Information about product something",
+            "models": [
+                {
+                    "model": "optical",
+                    "photo_path": "bot/static/media/optical.jpg",
+                    "price": 4000.0,
+                    "id": 2
+                },
+                {
+                    "model": "wired",
+                    "photo_path": "bot/static/media/iphone11.jpg",
+                    "price": 12000.0,
+                    "id": 3
+                }
+            ]
+        }
+    ]
+}
+//updateProducts(ManualfetchedFileData);
+
+//let config = [];
+
+/*
 console.log(fetchedFileData);
 
 for(let i = 0; i < fetchedFileData['products'].length; i++){
