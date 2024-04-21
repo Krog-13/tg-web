@@ -1,3 +1,5 @@
+let map = {}
+let cart = []
 /*
 const config = [
     {
@@ -51,21 +53,44 @@ function updateProducts(){
       };
 
     fetch(url, options)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok');
+            }
+            return response.json(); // Parse the response body as JSON
+        })
+        .then(data => {
+            // Handle the response data here
+            fetchedFileData = data;
+            console.log(data);
+        })
+        .catch(error => {
+            // Handle errors here
+            console.error('There was a problem with the fetch operation:', error);
+        });
+    console.log(fetchedFileData);
+
+    for(let i = 0; i < fetchedFileData['products'].length; i++){
+        let rootItem = fetchedFileData['products'][i];
+    
+        for(let j = 0; j < rootItem['models'].length; j++){
+            curModel = rootItem['models'][j];   
+            let item = {
+                productID: curModel['id'],
+                name: curModel['model'],
+                price: curModel['price'],
+                image_src: curModel['photo_path']
+            }
+            config.push(item)
         }
-        return response.json(); // Parse the response body as JSON
-      })
-      .then(data => {
-        // Handle the response data here
-        fetchedFileData = data;
-        console.log(data);
-      })
-      .catch(error => {
-        // Handle errors here
-        console.error('There was a problem with the fetch operation:', error);
-      });
+    }
+    
+    for (let i = 0; i < config.length; i++) {
+        const item = config[i];
+        catalogueDivAddItem(item, i);
+    }
+    
+    console.log(config);
 }
 
 /*
@@ -114,76 +139,6 @@ fetchedFileData = {
 */
 
 let config = [];
-
-updateProducts();
-
-console.log(fetchedFileData);
-
-for(let i = 0; i < fetchedFileData['products'].length; i++){
-    let rootItem = fetchedFileData['products'][i];
-
-    for(let j = 0; j < rootItem['models'].length; j++){
-        curModel = rootItem['models'][j];   
-        let item = {
-            productID: curModel['id'],
-            name: curModel['model'],
-            price: curModel['price'],
-            image_src: curModel['photo_path']
-        }
-        config.push(item)
-    }
-}
-
-for (let i = 0; i < config.length; i++) {
-    const item = config[i];
-    catalogueDivAddItem(item, i);
-}
-
-console.log(config);
-
-
-
-function hideElement(element) {
-    if (element) {
-        element.style.display = "none";
-    } else {
-        console.error("Element is null or undefined.");
-    }
-}
-
-function showElement(element) {
-    if (element) {
-        element.style.display = "block";
-    } else {
-        console.error("Element is null or undefined.");
-    }
-}
-
-let map = {}
-let cart = []
-
-function updateCartTotal(priceChange) {
-    cartSumSpan = document.getElementById('cartSum');
-    let cartTotal = parseInt(cartSumSpan.textContent);
-    cartTotal += priceChange;
-    cartSumSpan.innerText = cartTotal;
-}
-
-function changeSelectedItem(ProductIndex){
-    let selectedItemNameElement = document.getElementById("selectedItemName");
-    let selectedItemPricelement = document.getElementById("selectedItemPrice");
-    let selectedItemImageElement = document.getElementById("selectedItemImage");
-
-    selectedItemNameElement.textContent = config[ProductIndex].name;
-    selectedItemPricelement.textContent = config[ProductIndex].price;
-    selectedItemImageElement.src = config[ProductIndex].image_src;
-}
-
-function updateShowcaseSumSpan(price, quantity){
-    showcaseSumSpan = document.getElementById("showcaseSumSpan");
-
-    showcaseSumSpan.textContent = (price * quantity);
-}
 
 let catalogueDiv = document.getElementsByClassName("catalogue")[0];
 
@@ -263,6 +218,71 @@ function catalogueDivAddItem(item, i){
     });
 
     catalogueDiv.appendChild(itemDiv);
+}
+
+updateProducts();
+
+console.log(fetchedFileData);
+
+for(let i = 0; i < fetchedFileData['products'].length; i++){
+    let rootItem = fetchedFileData['products'][i];
+
+    for(let j = 0; j < rootItem['models'].length; j++){
+        curModel = rootItem['models'][j];   
+        let item = {
+            productID: curModel['id'],
+            name: curModel['model'],
+            price: curModel['price'],
+            image_src: curModel['photo_path']
+        }
+        config.push(item)
+    }
+}
+
+for (let i = 0; i < config.length; i++) {
+    const item = config[i];
+    catalogueDivAddItem(item, i);
+}
+
+console.log(config);
+
+function hideElement(element) {
+    if (element) {
+        element.style.display = "none";
+    } else {
+        console.error("Element is null or undefined.");
+    }
+}
+
+function showElement(element) {
+    if (element) {
+        element.style.display = "block";
+    } else {
+        console.error("Element is null or undefined.");
+    }
+}
+
+function updateCartTotal(priceChange) {
+    cartSumSpan = document.getElementById('cartSum');
+    let cartTotal = parseInt(cartSumSpan.textContent);
+    cartTotal += priceChange;
+    cartSumSpan.innerText = cartTotal;
+}
+
+function changeSelectedItem(ProductIndex){
+    let selectedItemNameElement = document.getElementById("selectedItemName");
+    let selectedItemPricelement = document.getElementById("selectedItemPrice");
+    let selectedItemImageElement = document.getElementById("selectedItemImage");
+
+    selectedItemNameElement.textContent = config[ProductIndex].name;
+    selectedItemPricelement.textContent = config[ProductIndex].price;
+    selectedItemImageElement.src = config[ProductIndex].image_src;
+}
+
+function updateShowcaseSumSpan(price, quantity){
+    showcaseSumSpan = document.getElementById("showcaseSumSpan");
+
+    showcaseSumSpan.textContent = (price * quantity);
 }
 
 /*
