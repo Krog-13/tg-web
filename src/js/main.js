@@ -1,3 +1,4 @@
+/*
 const config = [
     {
         productID: 101,
@@ -34,30 +35,13 @@ const config = [
         name: "Забыл что тут должно быть",
         price: 1_234,
         image_src: "src/images/pic3.jpg"
-    }
-    
+    }  
 ];
+*/
 
-function hideElement(element) {
-    if (element) {
-        element.style.display = "none";
-    } else {
-        console.error("Element is null or undefined.");
-    }
-}
+let fetchedFileData;
 
-function showElement(element) {
-    if (element) {
-        element.style.display = "block";
-    } else {
-        console.error("Element is null or undefined.");
-    }
-}
-
-/*
-let orders = document.getElementById("update")
-orders.addEventListener("click", () => {
-    //console.log("update data")
+function updateProducts(){
     let url = 'https://krog-dev.kz/product'
     const options = {
         method: 'GET', // Change method to GET
@@ -75,14 +59,94 @@ orders.addEventListener("click", () => {
       })
       .then(data => {
         // Handle the response data here
-        //console.log(data);
+        fetchedFileData = data;
+        console.log(data);
       })
       .catch(error => {
         // Handle errors here
         console.error('There was a problem with the fetch operation:', error);
       });
-}) */
+}
+updateProducts();
+/*
+fetchedFileData = {
+    "products": [
+        {
+            "name": "iphone",
+            "auction": true,
+            "description": "Information about product something",
+            "models": [
+                {
+                    "model": "11",
+                    "photo_path": "bot/static/media/iphone11.jpg",
+                    "price": 12000.0,
+                    "id": 1
+                },
+                {
+                    "model": "12",
+                    "photo_path": "bot/static/media/optical.jpg",
+                    "price": 4000.0,
+                    "id": 4
+                }
+            ]
+        },
+        {
+            "name": "mouse",
+            "auction": false,
+            "description": "Information about product something",
+            "models": [
+                {
+                    "model": "optical",
+                    "photo_path": "bot/static/media/optical.jpg",
+                    "price": 4000.0,
+                    "id": 2
+                },
+                {
+                    "model": "wired",
+                    "photo_path": "bot/static/media/iphone11.jpg",
+                    "price": 12000.0,
+                    "id": 3
+                }
+            ]
+        }
+    ]
+}
+*/
 
+let config = [];
+
+for(let i = 0; i < fetchedFileData['products'].length; i++){
+    let rootItem = fetchedFileData['products'][i];
+
+    for(let j = 0; j < rootItem['models'].length; j++){
+        curModel = rootItem['models'][j];   
+        let item = {
+            productID: curModel['id'],
+            name: curModel['model'],
+            price: curModel['price'],
+            image_src: curModel['photo_path']
+        }
+        config.push(item)
+    }
+}
+
+console.log(config);
+
+function hideElement(element) {
+    if (element) {
+        element.style.display = "none";
+    } else {
+        console.error("Element is null or undefined.");
+    }
+}
+
+function showElement(element) {
+    if (element) {
+        element.style.display = "block";
+    } else {
+        console.error("Element is null or undefined.");
+    }
+}
 
 let map = {}
 let cart = []
@@ -112,8 +176,7 @@ function updateShowcaseSumSpan(price, quantity){
 
 let catalogueDiv = document.getElementsByClassName("catalogue")[0];
 
-for (let i = 0; i < config.length; i++) {
-    const item = config[i];
+function catalogueDivAddItem(item, i){
     console.log(`Name: ${item.name}, Price: ${item.price}`);
 
     map[item.productID] = i;
@@ -190,6 +253,42 @@ for (let i = 0; i < config.length; i++) {
 
     catalogueDiv.appendChild(itemDiv);
 }
+
+for (let i = 0; i < config.length; i++) {
+    const item = config[i];
+    catalogueDivAddItem(item, i);
+}
+
+/*
+console.log(fetchedFileData['products'].length);
+
+for (let i = 0; i < fetchedFileData['products'].length; i++) {
+    const curProduct = fetchedFileData['products'][i];
+    const item = {
+        productID: curProduct['models'][0].id,
+        name: curProduct.name,
+        price: curProduct['models'][0].price,
+        image_src: curProduct['models'][0].photo_path
+    };
+    console.log(item);
+    catalogueDivAddItem(item, i);
+}
+
+const config = [
+    {
+        productID: 101,
+        name: "Egor",
+        price: 300,
+        image_src: "src/images/pic0.jpg"
+    }
+]
+
+for (let i = 0; i < config.length; i++) {
+    const item = config[i];
+    
+}
+*/
+
 
 document.getElementById('showcaseRemoveButton').addEventListener('click', function(){
     showcaseQuantitySpan = document.getElementById("showcaseQuantitySpan");
@@ -302,7 +401,7 @@ orderButton.addEventListener("click", function(){
     */
 });
 
-document.getElementById("registrationFormButton").addEventListener("submit", orderButton);
+//document.getElementById("registrationFormButton").addEventListener("submit", orderButton);
 
 
 function UpdateCartTable(){
@@ -389,6 +488,8 @@ function UpdateCartTable(){
         hideElement(document.getElementById("cartDiv"));
         hideElement(document.getElementById("showcase"));
         showElement(document.getElementById("mainshop"));
+        showElement(document.getElementById("cartButton"));
+        hideElement(document.getElementById("orderButton"));
     });
 
     const cartTotal = cart.reduce((total, cartItem) => {
@@ -407,6 +508,11 @@ document.getElementById("cartButton").addEventListener('click', function(){
     hideElement(document.getElementById("showcase"));;
     showElement(document.getElementById("cartDiv"));
     hideElement(document.getElementById("mainshop"));
+    hideElement(document.getElementById("cartButton"));
+    showElement(document.getElementById("orderButton"));
+
+    document.getElementById("orderSum").textContent = parseInt(document.getElementById("cartSum").textContent);
+
 });
 
 UpdateCartTable()
@@ -414,4 +520,5 @@ UpdateCartTable()
 hideElement(document.getElementById("showcase"));
 hideElement(document.getElementById("cartDiv"));
 hideElement(document.getElementById("showcaseAddToCartButton"));
-hideElement(document.getElementById("mainshop"));
+hideElement(document.getElementById("OrderInformationDiv"));
+//hideElement(document.getElementById("mainshop"));

@@ -103,16 +103,15 @@
     </div>
 
     <div id="OrderInformationDiv">
-        <form id="registrationForm" method="post">
-            <div class="question-block">
-                <h2>Оформление заказа</h2>
-                
+        <form id="registrationForm"> <!-- method='post' -->
+            <h2>Оформление заказа</h2>
+            <div class="question-block">    
                 <label for="name">Имя:</label>
                 <input type="text" id="name" name="name" required>
             </div>
             
             <div class="question-block">
-                <label for="phone">Телефон:</label>
+                <label for="phone">Телефон:</label><br/>
                 <input type="tel" id="phone" name="phone" required>
             </div>
             
@@ -143,7 +142,6 @@
             <button type="submit" id="registrationFormButton"> Оформить Заказ </button>
         </form>
     </div>
-    
     <style>
         /* Стили для блоков с вопросами */
         .question-block {
@@ -153,8 +151,15 @@
             margin-bottom: 15px;
         }
         
+        .question-block input, textarea{
+            align-self: center;
+            width: 90%;
+        }
+
         /* Стили для заголовка "Оформление заказа" */
-        .question-block h2 {
+        #registrationForm h2 {
+            align-self: center;
+            text-align: center;
             font-size: 24px;
             margin-bottom: 10px;
         }
@@ -164,8 +169,10 @@
 
     <button class="bottomButton" id="cartButton"> Корзина: <span id="cartSum">0</span> тг </button>
     <button class="bottomButton" id="showcaseAddToCartButton" style="display: none;"> Добавить в Корзину</button>
-    <button class="bottomButton" id="orderButton" style="display: none;"> Оформить Заказ: <span id="cartSum">0</span> тг </button>
-
+    <button class="bottomButton" id="orderButton" style="display: none;"> Оформить Заказ: <span id="orderSum">0</span> тг </button>
+    <!-- Кнопка подтверждения заказа  
+        <button class="bottomButton" id="  " style="display: none;"> Подтвердить Заказ: </button>
+    -->
     <div id="cartDiv" style="display: none;"> 
         <div id="cartDivTitle">
             <button style="font-size: 20px;" id="cartBackToShopButton">&#129044;</button>
