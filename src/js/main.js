@@ -39,7 +39,7 @@ const config = [
 ];
 */
 
-let fetchedFileData;
+let fetchedFileData = {"products": []}; 
 
 function updateProducts(){
     let url = 'https://krog-dev.kz/product'
@@ -115,27 +115,30 @@ fetchedFileData = {
 
 let config = [];
 
-updateProducts().then(function(){
-    for(let i = 0; i < fetchedFileData['products'].length; i++){
-        let rootItem = fetchedFileData['products'][i];
+updateProducts();
 
-        for(let j = 0; j < rootItem['models'].length; j++){
-            curModel = rootItem['models'][j];   
-            let item = {
-                productID: curModel['id'],
-                name: curModel['model'],
-                price: curModel['price'],
-                image_src: curModel['photo_path']
-            }
-            config.push(item)
+console.log(fetchedFileData);
+
+for(let i = 0; i < fetchedFileData['products'].length; i++){
+    let rootItem = fetchedFileData['products'][i];
+
+    for(let j = 0; j < rootItem['models'].length; j++){
+        curModel = rootItem['models'][j];   
+        let item = {
+            productID: curModel['id'],
+            name: curModel['model'],
+            price: curModel['price'],
+            image_src: curModel['photo_path']
         }
+        config.push(item)
     }
+}
 
-    for (let i = 0; i < config.length; i++) {
-        const item = config[i];
-        catalogueDivAddItem(item, i);
-    }
-});
+for (let i = 0; i < config.length; i++) {
+    const item = config[i];
+    catalogueDivAddItem(item, i);
+}
+
 console.log(config);
 
 
