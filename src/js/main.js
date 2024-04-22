@@ -320,7 +320,7 @@ function updateShowcase(productId){
     let showcaseAddToCartButton = document.getElementById('showcaseAddToCartButton');
 
     showcaseTitle.textContent = config[index].name + ' ' +  config[index].model ;
-    showcaseImage.src = config[index].image_src;
+    showcaseImage.src = '/home/krog/tgbot_competition/' + config[index].image_src;
     showcaseDescription.textContent = config[index].description;
 
     showcaseRemoveButton.setAttribute("data-id", config[index].productId);
