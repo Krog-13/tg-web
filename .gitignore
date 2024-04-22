@@ -4,6 +4,6 @@ main.py
 .vscode/*
 # Local History for Visual Studio Code
 .history/
-example.*
 example_ReceivedData.*
 example_sentData.*
+src/images/*

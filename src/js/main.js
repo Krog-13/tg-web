@@ -227,7 +227,7 @@ function constractConfig(data){
                 name: rootItem['name'],
                 model: curModel['model'],
                 price: curModel['price'],
-                image_src: '/home/krog/tgbot_competition/' + curModel['photo_path'],
+                image_src: curModel['photo_path'],
                 description: rootItem['description']
             }
             
