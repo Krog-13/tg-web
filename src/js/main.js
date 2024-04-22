@@ -227,7 +227,7 @@ function constractConfig(data){
                 name: rootItem['name'],
                 model: curModel['model'],
                 price: curModel['price'],
-                image_src: curModel['photo_path'],
+                image_src: '/home/krog/tgbot_competition/' + curModel['photo_path'],
                 description: rootItem['description']
             }
             
@@ -320,7 +320,7 @@ function updateShowcase(productId){
     let showcaseAddToCartButton = document.getElementById('showcaseAddToCartButton');
 
     showcaseTitle.textContent = config[index].name + ' ' +  config[index].model ;
-    showcaseImage.src = '/home/krog/tgbot_competition/' + config[index].image_src;
+    showcaseImage.src = config[index].image_src;
     showcaseDescription.textContent = config[index].description;
 
     showcaseRemoveButton.setAttribute("data-id", config[index].productId);
