@@ -1,6 +1,3 @@
-let map = {}
-let cart = []
-let config = [];
 /*
 const config = [
     {
@@ -41,17 +38,92 @@ const config = [
     }  
 ];
 */
-let fetchedFileData = {"products": []}; 
+
+ManualfetchedFileData = {
+    "products": [
+        {
+            "name": "Human",
+            "auction": true,
+            "description": "Couple of persons, to chose",
+            "models": [
+                {
+                    "model": "egor",
+                    "photo_path": "bot/static/media/egor.jpg",
+                    "price": 12000.0,
+                    "id": 101
+                },
+                {
+                    "model": "Ulyana",
+                    "photo_path": "bot/static/media/ulyana.jpg",
+                    "price": 4000.0,
+                    "id": 102
+                },
+                {
+                    "model": "Megumin",
+                    "photo_path": "bot/static/media/megumin.jpg",
+                    "price": 8000.0,
+                    "id": 103
+                }
+            ]
+        },
+        {
+            "name": "mouse",
+            "auction": false,
+            "description": "Information about product something",
+            "models": [
+                {
+                    "model": "optical",
+                    "photo_path": "bot/static/media/optical.jpg",
+                    "price": 4000.0,
+                    "id": 201
+                },
+                {
+                    "model": "wired",
+                    "photo_path": "bot/static/media/iphone11.jpg",
+                    "price": 12000.0,
+                    "id": 202
+                }
+            ]
+        }
+    ]
+}
+
+//ManualfetchedFileData = {"products":[{"name":"iphone","auction":true,"description":"Informationaboutproductsomething","models":[{"model":"11","photo_path":"bot/static/media/iphone11.jpg","price":12000.0,"id":1},{"model":"12","photo_path":"bot/static/media/optical.jpg","price":4000.0,"id":4}]},{"name":"mouse","auction":false,"description":"Informationaboutproductsomething","models":[{"model":"optical","photo_path":"bot/static/media/optical.jpg","price":4000.0,"id":2},{"model":"wired","photo_path":"bot/static/media/iphone11.jpg","price":12000.0,"id":3}]}]};
+
+let map = {} // ProductID to config index 
+let cnt = 0; // counter for map
+let cart = [] // cart that will be sended to the server (purchase info only)
+let config = []; // config data of items for showcase
+
+let fetchedFileData = {"products": []};  // Data that we get
+
 let catalogueDiv = document.getElementsByClassName("catalogue")[0];
+let orderButton = document.getElementById("orderButton");
+let showcaseDiv = document.getElementById("showcase");
+//let buy = document.getElementById("buy")
+//let order = document.getElementById("order")
+let tg = window.Telegram.WebApp;
+let initdata = tg.initData;
+let dataunsave = tg.initDataUnsafe;
+tg.expand();
 
-function catalogueDivAddItem(item, i){
-    console.log(`Name: ${item.name}, Price: ${item.price}`);
+function hideElement(element) {
+    if (element) {
+        element.style.display = "none";
+    } else {
+        console.error("Element is null or undefined.");
+    }
+}
 
-    map[item.productID] = i;
-    cart.push({
-        productID: item.productID,
-        quantity: 0
-    });
+function catalogueDivAddItem(item){
+    /*item = {
+        productID: 101,
+        name: "Egor",
+        price: 300,
+        image_src: "src/images/pic0.jpg"
+    },*/
+
+    //console.log(`Name: ${item.name}, Price: ${item.price}`);
 
     var itemDiv = document.createElement('div');
     
@@ -94,6 +166,9 @@ function catalogueDivAddItem(item, i){
         }
     });
 
+    hideElement(addButton);
+    hideElement(removeButton);
+
     imgButton.addEventListener('click', function(){
         hideElement(document.getElementById("mainshop"));
         hideElement(document.getElementById("cartButton"));
@@ -101,22 +176,9 @@ function catalogueDivAddItem(item, i){
         showElement(document.getElementById("showcaseAddToCartButton"));
 
         const productId = this.getAttribute('data-id');
-        const index = map[productId];
-        let showcaseTitle = document.getElementById('showcaseTitleH1');
-        showcaseTitle.textContent = config[index].name;
-        let showcaseImage = document.getElementById('showcaseImage');
-        showcaseImage.src = config[index].image_src;
-        let showcaseDescription = document.getElementById('showcaseDescription');
-        //showcaseDescription.src = config[index].name;
-        showcaseDescription.src = "Опсание товара";
-        let showcaseRemoveButton = document.getElementById('showcaseRemoveButton');
-        showcaseRemoveButton.setAttribute("data-id", item.productID);
-        //showcaseRemoveButton.removeEventListener("click");
-        let showcaseAddButton = document.getElementById('showcaseAddButton');
-        showcaseAddButton.setAttribute("data-id", item.productID);
 
-        showcaseAddToCartButton.setAttribute("data-id", item.productID);
-        //showcaseAddButton.removeEventListener("click");
+        showcaseDiv.setAttribute("productId", productId);
+        updateShowcase();
     });
 
     catalogueDiv.appendChild(itemDiv);
@@ -140,132 +202,60 @@ function getData(){
         })
         .then(data => {
             // Handle the response data here
-            updateProducts(data);
+            constractConfig(data);
             console.log(data);
         })
         .catch(error => {
             // Handle errors here
+            constractConfig(ManualfetchedFileData);
             console.error('There was a problem with the fetch operation:', error);
         });
 }
 
-function updateProducts(data){
+function constractConfig(data){
     fetchedFileData = data;
     console.log(fetchedFileData);
 
     for(let i = 0; i < fetchedFileData['products'].length; i++){
         let rootItem = fetchedFileData['products'][i];
     
-        for(let j = 0; j < rootItem['models'].length; j++){
-            curModel = rootItem['models'][j];   
+        for(let j = 0; j < rootItem['models'].length; j++){            
+            curModel = rootItem['models'][j];
             let item = {
                 productID: curModel['id'],
-                name: curModel['model'],
+                rootIndex: i,
+                name: rootItem['name'],
+                model: curModel['model'],
                 price: curModel['price'],
-                image_src: curModel['photo_path']
+                image_src: curModel['photo_path'],
+                description: rootItem['description']
             }
+            
+            map[item.productID] = cnt;
+            cnt++;
+            cart.push({
+                productID: item.productID,
+                quantity: 0
+            });
+
             config.push(item)
         }
+        catalogueDivAddItem({ // only roots in catalogue
+            productID: rootItem['models'][0]['id'],
+            name: rootItem['name'],
+            //model: curModel['model'], it should not be here
+            price: rootItem['models'][0]['price'], // here should be minimum of all models and '+'
+            image_src: rootItem['models'][0]['photo_path'],// path of first
+            //description: rootItem['description']// useless for catalogue
+        });
     }
-    
+    /*
     for (let i = 0; i < config.length; i++) {
         const item = config[i];
-        catalogueDivAddItem(item, i);
+        catalogueDivAddItem(item);
     }
-    
+    */
     console.log(config);   
-}
-
-
-getData();
-
-
-ManualfetchedFileData = {
-    "products": [
-        {
-            "name": "iphone",
-            "auction": true,
-            "description": "Information about product something",
-            "models": [
-                {
-                    "model": "11",
-                    "photo_path": "bot/static/media/iphone11.jpg",
-                    "price": 12000.0,
-                    "id": 1
-                },
-                {
-                    "model": "12",
-                    "photo_path": "bot/static/media/optical.jpg",
-                    "price": 4000.0,
-                    "id": 4
-                }
-            ]
-        },
-        {
-            "name": "mouse",
-            "auction": false,
-            "description": "Information about product something",
-            "models": [
-                {
-                    "model": "optical",
-                    "photo_path": "bot/static/media/optical.jpg",
-                    "price": 4000.0,
-                    "id": 2
-                },
-                {
-                    "model": "wired",
-                    "photo_path": "bot/static/media/iphone11.jpg",
-                    "price": 12000.0,
-                    "id": 3
-                }
-            ]
-        }
-    ]
-}
-//updateProducts(ManualfetchedFileData);
-
-//let config = [];
-
-/*
-console.log(fetchedFileData);
-
-for(let i = 0; i < fetchedFileData['products'].length; i++){
-    let rootItem = fetchedFileData['products'][i];
-
-    for(let j = 0; j < rootItem['models'].length; j++){
-        curModel = rootItem['models'][j];   
-        let item = {
-            productID: curModel['id'],
-            name: curModel['model'],
-            price: curModel['price'],
-            image_src: curModel['photo_path']
-        }
-        config.push(item)
-    }
-}
-
-for (let i = 0; i < config.length; i++) {
-    const item = config[i];
-    catalogueDivAddItem(item, i);
-}
-
-console.log(config);
-*/
-
-function hideElement(element) {
-    if (element) {
-        element.style.display = "none";
-    } else {
-        console.error("Element is null or undefined.");
-    }
-}
-
-function showElement(element) {
-    if (element) {
-        element.style.display = "block";
-    } else {
-        console.error("Element is null or undefined.");
-    }
 }
 
 function updateCartTotal(priceChange) {
@@ -285,42 +275,66 @@ function changeSelectedItem(ProductIndex){
     selectedItemImageElement.src = config[ProductIndex].image_src;
 }
 
+function showElement(element) {
+    if (element) {
+        element.style.display = "block";
+    } else {
+        console.error("Element is null or undefined.");
+    }
+}
+
+function updateShowcaseModelButtons(rootIndex){
+    console.log(rootIndex);
+    showcaseModelContainer = document.getElementById("showcaseModelContainer");
+    showcaseModelContainer.innerHTML = '';
+    const curModels = fetchedFileData['products'][rootIndex]['models'];
+    console.log(curModels);
+    for(let i = 0; i < curModels.length; i++){
+        let curModelButton = document.createElement('button');
+        curModelButton.textContent = curModels[i]['model'];
+        curModelButton.setAttribute("productId", curModels[i].id);
+
+        curModelButton.addEventListener('click', function(){
+            showcaseDiv.setAttribute("productId", this.getAttribute('productId'));
+            updateShowcase();
+        });
+        
+        showcaseModelContainer.appendChild(curModelButton);
+    }
+}
+
+function updateShowcase(productId){
+    //showcaseDiv.setAttribute("productId", item.productID);
+    productId = showcaseDiv.getAttribute('productId');
+    const index = map[productId];
+    console.log(config[index]);
+
+    updateShowcaseSumSpan(0, 0);
+    document.getElementById("showcaseQuantitySpan").textContent = 0;
+    
+    let showcaseTitle = document.getElementById('showcaseTitleH1');
+    let showcaseImage = document.getElementById('showcaseImage');
+    let showcaseDescription = document.getElementById('showcaseDescription');
+    let showcaseRemoveButton = document.getElementById('showcaseRemoveButton');
+    let showcaseAddButton = document.getElementById('showcaseAddButton');
+    let showcaseAddToCartButton = document.getElementById('showcaseAddToCartButton');
+
+    showcaseTitle.textContent = config[index].name + ' ' +  config[index].model ;
+    showcaseImage.src = config[index].image_src;
+    showcaseDescription.textContent = config[index].description;
+
+    showcaseRemoveButton.setAttribute("data-id", config[index].productId);
+    showcaseAddButton.setAttribute("data-id", config[index].productID);
+    showcaseAddToCartButton.setAttribute("data-id", config[index].productID);
+
+    updateShowcaseModelButtons(config[index].rootIndex);
+}
+
 function updateShowcaseSumSpan(price, quantity){
     showcaseSumSpan = document.getElementById("showcaseSumSpan");
 
     showcaseSumSpan.textContent = (price * quantity);
 }
-
-/*
-console.log(fetchedFileData['products'].length);
-
-for (let i = 0; i < fetchedFileData['products'].length; i++) {
-    const curProduct = fetchedFileData['products'][i];
-    const item = {
-        productID: curProduct['models'][0].id,
-        name: curProduct.name,
-        price: curProduct['models'][0].price,
-        image_src: curProduct['models'][0].photo_path
-    };
-    console.log(item);
-    catalogueDivAddItem(item, i);
-}
-
-const config = [
-    {
-        productID: 101,
-        name: "Egor",
-        price: 300,
-        image_src: "src/images/pic0.jpg"
-    }
-]
-
-for (let i = 0; i < config.length; i++) {
-    const item = config[i];
-    
-}
-*/
-
 
 document.getElementById('showcaseRemoveButton').addEventListener('click', function(){
     showcaseQuantitySpan = document.getElementById("showcaseQuantitySpan");
@@ -353,10 +367,10 @@ function backToShopMethod(){
     showElement(document.getElementById("cartButton"));
     hideElement(document.getElementById("showcaseAddToCartButton"));
 
-    document.getElementById('showcaseAddToCartButton').setAttribute("data-id", -1);
-    document.getElementById('showcaseAddToCartButton').setAttribute("data-q", -1);
+    document.getElementById('showcaseAddToCartButton').setAttribute("data-id", 0);
+    document.getElementById('showcaseAddToCartButton').setAttribute("data-q", 0);
 
-    updateShowcaseSumSpan(0, 0);
+    //updateShowcaseSumSpan(0, 0);
     document.getElementById("showcaseQuantitySpan").textContent = 0;
 }
 
@@ -371,10 +385,6 @@ document.getElementById('showcaseAddToCartButton').addEventListener('click', fun
 });
 
 //image_src = "assets/images/dendi/pic1.jpg";
-let tg = window.Telegram.WebApp;
-let buy = document.getElementById("buy")
-let order = document.getElementById("order")
-tg.expand()
 
 /*
 buy.addEventListener("click", () => {
@@ -384,11 +394,6 @@ buy.addEventListener("click", () => {
     document.getElementById("myname").value = "Test"
 });
 */
-
-let initdata = tg.initData;
-let dataunsave = tg.initDataUnsafe;
-
-let orderButton = document.getElementById("orderButton");
 
 orderButton.addEventListener("click", function(){
     console.log("Init data above")
@@ -435,7 +440,6 @@ orderButton.addEventListener("click", function(){
 
 //document.getElementById("registrationFormButton").addEventListener("submit", orderButton);
 
-
 function UpdateCartTable(){
     const cartContent = document.querySelector('#cartContent tbody');
     cartContent.innerHTML = "";
@@ -475,7 +479,7 @@ function UpdateCartTable(){
             cartItemDiv.innerHTML = `
                 <img src="${product.image_src}" alt="Товар">
                 <div class="item-details">
-                    <h3>${product.name}</h3>
+                    <h3>${product.name} ${product.model}</h3>
                     <p>${product.price} тг</p>
                 </div>
                 <div class="quantity-control">
@@ -547,8 +551,8 @@ document.getElementById("cartButton").addEventListener('click', function(){
 
 });
 
-UpdateCartTable()
-
+getData();
+UpdateCartTable();
 hideElement(document.getElementById("showcase"));
 hideElement(document.getElementById("cartDiv"));
 hideElement(document.getElementById("showcaseAddToCartButton"));
