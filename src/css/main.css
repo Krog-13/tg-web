@@ -2,10 +2,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Montserrat';
+    font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 400;
-    src: url(https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap);
+    src: url(https://fonts.googleapis.com/css2?family=Inter&display=swap);
 }
 
 img {
@@ -15,11 +15,12 @@ img {
 }
 
 body {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: 200;
     color: var(--tg-theme-text-color);
     background: var(--tg-theme-bg-color);
 }
+
 
 #main img{
     padding: 0px 10px 10px 10px;
@@ -38,6 +39,7 @@ body {
 }
 
 h1 {
+    font-weight: 800; 
     margin-top: 20px;
     margin-bottom: 10px;
     color: #EFBC9B;
@@ -45,6 +47,7 @@ h1 {
 }
 
 h2 {
+    font-weight: 600; 
     align-self: center;
     margin-top: 50px;
     margin-bottom: 10px;
@@ -329,4 +332,9 @@ asdf item::before {
 
 #cartBackToShopButton {
     margin: 10px;
+}
+
+.quantity-control .clearButton{
+    width: auto;
+    margin-left: 10px;
 }

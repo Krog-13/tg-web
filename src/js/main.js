@@ -4,37 +4,37 @@ const config = [
         productID: 101,
         name: "Egor",
         price: 300,
-        image_src: "src/images/pic0.jpg"
+        image_src: "pic0.jpg"
     },
     {
         productID: 102,
         name: "Ulyana",
         price: 1_000,
-        image_src: "src/images/pic1.jpg"
+        image_src: "pic1.jpg"
     },
     {
         productID: 103,
         name: "Новогодняя Мегумин!",
         price: 150_000,
-        image_src: "src/images/pic2.jpg"
+        image_src: "pic2.jpg"
     },
     {
         productID: 104,
         name: "Андроид!",
         price: 100,
-        image_src: "src/images/pic5.jpg"
+        image_src: "pic5.jpg"
     },
     {
         productID: 105,
         name: "Лекции по физике",
         price: 20,
-        image_src: "src/images/pic4.jpg"
+        image_src: "pic4.jpg"
     },
     {
         productID: 106,
         name: "Забыл что тут должно быть",
         price: 1_234,
-        image_src: "src/images/pic3.jpg"
+        image_src: "pic3.jpg"
     }  
 ];
 */
@@ -48,38 +48,38 @@ ManualfetchedFileData = {
             "models": [
                 {
                     "model": "egor",
-                    "photo_path": "bot/static/media/egor.jpg",
+                    "photo_path": "pic0.jpg",
                     "price": 12000.0,
                     "id": 101
                 },
                 {
                     "model": "Ulyana",
-                    "photo_path": "bot/static/media/ulyana.jpg",
+                    "photo_path": "pic1.jpg",
                     "price": 4000.0,
                     "id": 102
                 },
                 {
                     "model": "Megumin",
-                    "photo_path": "bot/static/media/megumin.jpg",
+                    "photo_path": "pic2.jpg",
                     "price": 8000.0,
                     "id": 103
                 }
             ]
         },
         {
-            "name": "mouse",
+            "name": "Mouse",
             "auction": false,
             "description": "Information about product something",
             "models": [
                 {
                     "model": "optical",
-                    "photo_path": "bot/static/media/optical.jpg",
+                    "photo_path": "pic3.jpg",
                     "price": 4000.0,
                     "id": 201
                 },
                 {
                     "model": "wired",
-                    "photo_path": "bot/static/media/iphone11.jpg",
+                    "photo_path": "pic4.jpg",
                     "price": 12000.0,
                     "id": 202
                 }
@@ -88,7 +88,7 @@ ManualfetchedFileData = {
     ]
 }
 
-//ManualfetchedFileData = {"products":[{"name":"iphone","auction":true,"description":"Informationaboutproductsomething","models":[{"model":"11","photo_path":"bot/static/media/iphone11.jpg","price":12000.0,"id":1},{"model":"12","photo_path":"bot/static/media/optical.jpg","price":4000.0,"id":4}]},{"name":"mouse","auction":false,"description":"Informationaboutproductsomething","models":[{"model":"optical","photo_path":"bot/static/media/optical.jpg","price":4000.0,"id":2},{"model":"wired","photo_path":"bot/static/media/iphone11.jpg","price":12000.0,"id":3}]}]};
+//ManualfetchedFileData = {"products":[{"name":"iphone","auction":true,"description":"Informationaboutproductsomething","models":[{"model":"11","photo_path":"iphone11.jpg","price":12000.0,"id":1},{"model":"12","photo_path":"optical.jpg","price":4000.0,"id":4}]},{"name":"mouse","auction":false,"description":"Informationaboutproductsomething","models":[{"model":"optical","photo_path":"optical.jpg","price":4000.0,"id":2},{"model":"wired","photo_path":"iphone11.jpg","price":12000.0,"id":3}]}]};
 
 let map = {} // ProductID to config index 
 let cnt = 0; // counter for map
@@ -120,7 +120,7 @@ function catalogueDivAddItem(item){
         productID: 101,
         name: "Egor",
         price: 300,
-        image_src: "src/images/pic0.jpg"
+        image_src: "pic0.jpg"
     },*/
 
     //console.log(`Name: ${item.name}, Price: ${item.price}`);
@@ -227,10 +227,12 @@ function constractConfig(data){
                 name: rootItem['name'],
                 model: curModel['model'],
                 price: curModel['price'],
-                image_src: curModel['photo_path'],
+                image_src: 'src/images/' + curModel['photo_path'],
                 description: rootItem['description']
             }
             
+            console.log(item.image_src);
+
             map[item.productID] = cnt;
             cnt++;
             cart.push({
@@ -245,7 +247,7 @@ function constractConfig(data){
             name: rootItem['name'],
             //model: curModel['model'], it should not be here
             price: rootItem['models'][0]['price'], // here should be minimum of all models and '+'
-            image_src: rootItem['models'][0]['photo_path'],// path of first
+            image_src: 'src/images/' + rootItem['models'][0]['photo_path'],// path of first
             //description: rootItem['description']// useless for catalogue
         });
     }
@@ -483,6 +485,7 @@ function UpdateCartTable(){
                     <p>${product.price} тг</p>
                 </div>
                 <div class="quantity-control">
+                    <button class="clearButton" data-id="${product.productID}"> Удалить </button>
                     <button class="removeButton" data-id="${product.productID}">-</button>
                     <span>${cartItem.quantity}</span>
                     <button class="addButton" data-id="${product.productID}">+</button>
@@ -491,6 +494,7 @@ function UpdateCartTable(){
             
             let removeButton = cartItemDiv.querySelector('.removeButton');
             let addButton = cartItemDiv.querySelector('.addButton');
+            let clearButton = cartItemDiv.querySelector('.clearButton');
         
             addButton.addEventListener('click', function(){
                 const productId = this.getAttribute('data-id');
@@ -511,6 +515,18 @@ function UpdateCartTable(){
                     UpdateCartTable()
                 }
             });
+
+            clearButton.addEventListener('click', function(){
+                const productId = this.getAttribute('data-id');
+                const index = map[productId];
+                let t = cart[index].quantity;
+                cart[index].quantity = 0;
+                document.getElementById(`quantity-${productId}`).innerText = 0;
+                updateCartTotal(- (product.price * t));
+                UpdateCartTable()
+            
+            });
+
             cartDiv.appendChild(cartItemDiv);
         });
     }
