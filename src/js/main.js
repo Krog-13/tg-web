@@ -130,7 +130,7 @@ function catalogueDivAddItem(item){
     //itemDiv.setAttribute("data-id", item.productID);
     itemDiv.className = "item";
     itemDiv.innerHTML = `
-        <img src="/home/krog/tgbot_competition/bot/static/media/laser.jpg" class="imgButton" data-id="${item.productID}">
+        <img src="${item.image_src}" class="imgButton" data-id="${item.productID}">
         <p> ${item.name} </p>
         <span> ${item.price} тг </span>
         <p style="vertical-align: bottom;">
