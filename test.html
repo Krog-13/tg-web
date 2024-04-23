@@ -3,6 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Input Data Example</title>
+</head>
+<body>
+
+<!-- HTML input blocks with the same class -->
+<input type="text" class="myInput" placeholder="Enter something">
+<input type="text" class="myInput" placeholder="Enter something">
+<input type="text" class="myInput" placeholder="Enter something">
+
+<!-- Button to trigger JavaScript function -->
+<button onclick="getData()">Get Data</button>
+
+<!-- Script to retrieve data -->
+<script>
+function getData() {
+    // Select all input elements by their class
+    var inputElements = document.getElementsByClassName('myInput');
+    
+    // Initialize an array to store input values
+    var inputData = [];
+    
+    // Loop through all input elements
+    for (var i = 0; i < inputElements.length; i++) {
+        // Retrieve the value of each input element and push it to the array
+        inputData.push(inputElements[i].value);
+    }
+    
+    // Do something with the input data (for example, log it to the console)
+    console.log("Input data: ", inputData);
+    alert(inputData);
+}
+</script>
+
+</body>
+</html>
+
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shopping Cart</title>
 </head>
 <body>
@@ -79,3 +122,4 @@ document.getElementById('cartTotal').textContent = cartTotal + ' тг';
 </script>
 </body>
 </html>
+-->

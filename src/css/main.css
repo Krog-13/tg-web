@@ -317,7 +317,7 @@ asdf item::before {
     font-size: 18px; /* Размер шрифта */
 }
 
-#showcaseTitle button, #cartDivTitle button{
+#showcaseTitle button, #cartDivTitle button, #registrationFormTitle button{
     font-size: 16px;
     padding: 12px 24px;
     border: none;
@@ -330,11 +330,30 @@ asdf item::before {
     transition: background-color 0.3s ease; /* Плавное изменение цвета фона */
 }
 
-#cartBackToShopButton {
+#cartBackToShopButton, #registrationFormBackToShopButton{
     margin: 10px;
 }
 
 .quantity-control .clearButton{
     width: auto;
     margin-left: 10px;
+}
+.question-block {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.question-block input, textarea{
+    align-self: center;
+    width: 90%;
+}
+
+/* Стили для заголовка "Оформление заказа" */
+#registrationForm h2 {
+    align-self: center;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 10px;
 }

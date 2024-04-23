@@ -99,6 +99,7 @@ let fetchedFileData = {"products": []};  // Data that we get
 
 let catalogueDiv = document.getElementsByClassName("catalogue")[0];
 let orderButton = document.getElementById("orderButton");
+let registrationFormButton = document.getElementById("registrationFormButton");
 let showcaseDiv = document.getElementById("showcase");
 //let buy = document.getElementById("buy")
 //let order = document.getElementById("order")
@@ -265,6 +266,7 @@ function updateCartTotal(priceChange) {
     let cartTotal = parseInt(cartSumSpan.textContent);
     cartTotal += priceChange;
     cartSumSpan.innerText = cartTotal;
+    document.getElementById("orderSum").textContent = cartTotal;
 }
 
 function changeSelectedItem(ProductIndex){
@@ -376,6 +378,48 @@ function backToShopMethod(){
     document.getElementById("showcaseQuantitySpan").textContent = 0;
 }
 
+function backToCartMethod(){
+    showlement(document.getElementById("cartDiv"));
+    showElement(document.getElementById("registrationFormButton "));
+    hideElement(document.getElementById("showcase"));
+    hideElement(document.getElementById("mainshop"));
+    hideElement(document.getElementById("cartButton"));
+    hideElement(document.getElementById("showcaseAddToCartButton"));
+
+    document.getElementById('showcaseAddToCartButton').setAttribute("data-id", 0);
+    document.getElementById('showcaseAddToCartButton').setAttribute("data-q", 0);
+
+    //updateShowcaseSumSpan(0, 0);
+    document.getElementById("showcaseQuantitySpan").textContent = 0;
+}
+
+registrationFormButton.addEventListener('click', function(){
+    hideElement(document.getElementById("showcase"));
+    hideElement(document.getElementById("cartDiv"));
+    hideElement(document.getElementById("showcaseAddToCartButton"));
+    hideElement(document.getElementById("mainshop"));
+    hideElement(document.getElementById("cartButton"));
+    hideElement(document.getElementById("showcaseAddToCartButton"));
+    hideElement(document.getElementById("registrationFormButton"));
+    
+    showElement(document.getElementById("orderButton"));
+    showElement(document.getElementById("OrderInformationDiv"));
+});
+
+document.getElementById("registrationFormBackToShopButton").addEventListener('click', function(){
+    hideElement(document.getElementById("showcase"));
+    hideElement(document.getElementById("showcaseAddToCartButton"));
+    hideElement(document.getElementById("mainshop"));
+    hideElement(document.getElementById("cartButton"));
+    hideElement(document.getElementById("showcaseAddToCartButton"));
+    
+    hideElement(document.getElementById("orderButton"));
+    hideElement(document.getElementById("OrderInformationDiv"));
+
+    showElement(document.getElementById("registrationFormButton"));
+    showElement(document.getElementById("cartDiv"));
+});
+
 document.getElementById('showcaseAddToCartButton').addEventListener('click', function(){
     const productId = this.getAttribute('data-id');
     const index = map[productId];
@@ -398,11 +442,52 @@ buy.addEventListener("click", () => {
 */
 
 orderButton.addEventListener("click", function(){
+
+
+
+    var questionDivs = document.getElementsByClassName('questionInput');
+    //var inputData = [];
+    //for (var i = 0; i < questionDivs.length; i++) {
+        //inputData.push(questionDivs[i].value);
+        //console.log(questionDivs[i].value);
+    //}
+
+    // type of delivery 
+    /*
+        0 name  
+        1 phone
+        2 city 
+        3 postal code
+        4 adress
+        5 comment
+    */
+
+    user_data = {
+        "delivery_type": "PlaceHolder",
+        "name" : questionDivs[0].value,
+        "phone" : questionDivs[1].value,
+        "city" : questionDivs[2].value,
+        "postal_code" : questionDivs[3].value,
+        "adress" : questionDivs[4].value,
+        "comment" : questionDivs[5].value
+    };
+
     console.log("Init data above")
     console.log(initdata)
     console.log(dataunsave)
     console.log(dataunsave.user)
     /*
+test_data = {"data": [{"modelID": 1, "quantity": 1}, {"modelID": 2, "quantity": 2}],
+                "address": 
+                {"username":"Krog",
+
+            "phone":"874720284373", 
+            "city": "astana", 
+            "post_index": "00001",
+            "address": "st. Byqar ZHiray apt 45", 
+            "comment": "Don not work homephone", 
+            "deliver": true}}
+
     let address = document.getElementById("address").value
     let price = document.getElementById("price").value
     let code = document.getElementById("code").value
@@ -416,12 +501,13 @@ orderButton.addEventListener("click", function(){
     }
     */
 
-    data = cart; 
+    data = {cart, user_data}; 
     console.log(data);
 
     tg.sendData(JSON.stringify(data))
     tg.close()
     
+    //alert(data);
     /*
     document.getElementById("shop").style.display = 'none';
 
@@ -487,7 +573,7 @@ function UpdateCartTable(){
                 <div class="quantity-control">
                     <button class="clearButton" data-id="${product.productID}"> Удалить </button>
                     <button class="removeButton" data-id="${product.productID}">-</button>
-                    <span>${cartItem.quantity}</span>
+                    <span id="quantity-${product.productID}">${cartItem.quantity}</span>
                     <button class="addButton" data-id="${product.productID}">+</button>
                 </div>
             `;
@@ -514,6 +600,7 @@ function UpdateCartTable(){
                     updateCartTotal(- product.price);
                     UpdateCartTable()
                 }
+                UpdateCartTable()
             });
 
             clearButton.addEventListener('click', function(){
@@ -541,7 +628,7 @@ function UpdateCartTable(){
         hideElement(document.getElementById("showcase"));
         showElement(document.getElementById("mainshop"));
         showElement(document.getElementById("cartButton"));
-        hideElement(document.getElementById("orderButton"));
+        hideElement(document.getElementById("registrationFormButton"));
     });
 
     const cartTotal = cart.reduce((total, cartItem) => {
@@ -561,10 +648,9 @@ document.getElementById("cartButton").addEventListener('click', function(){
     showElement(document.getElementById("cartDiv"));
     hideElement(document.getElementById("mainshop"));
     hideElement(document.getElementById("cartButton"));
-    showElement(document.getElementById("orderButton"));
+    showElement(document.getElementById("registrationFormButton"));
 
     document.getElementById("orderSum").textContent = parseInt(document.getElementById("cartSum").textContent);
-
 });
 
 getData();
@@ -574,3 +660,5 @@ hideElement(document.getElementById("cartDiv"));
 hideElement(document.getElementById("showcaseAddToCartButton"));
 hideElement(document.getElementById("OrderInformationDiv"));
 //hideElement(document.getElementById("mainshop"));
+//showElement(document.getElementById("registrationFormButton"));
+//hideElement(document.getElementById("cartButton"));

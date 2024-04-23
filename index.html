@@ -64,14 +64,14 @@
     </div>
     
     <!-- <button id="update"> UPDATE! </button> -->
-    <!-- <input type="text" placeholder="address" id="myname"><br> -->
+    <!-- <input type="text" placeholder="address" id="myname"><br> 
     <form id="form">
         <input type="text" placeholder="address" id="address" value="Astana"><br>
         <input type="number" placeholder="count product" id="price"><br>
         <input type="text" disabled value="405" id="code">
         <button id="order">Submit</button>
     </form>
-
+    -->
     <div id="showcase">
         <!-- <hr> -->
         <div id="showcaseTitle">
@@ -105,21 +105,33 @@
     </div>
 
     <div id="OrderInformationDiv">
+
+
+
         <form id="registrationForm"> <!-- method='post' -->
+            <!-- 
+            <button style="font-size: 20px;" id="cartBackToShopButton">&#129044;</button>
             <h2>Оформление заказа</h2>
+            -->
+
+            <div id="registrationFormTitle">
+                <button style="font-size: 20px;" id="registrationFormBackToShopButton">&#129044;</button>
+                <h1 id="showcaseTitleH1"> Оформление заказа </h1>
+            </div>  
+
             <div class="question-block">    
                 <label for="name">Имя:</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name" required class="questionInput">
             </div>
             
             <div class="question-block">
                 <label for="phone">Телефон:</label><br/>
-                <input type="tel" id="phone" name="phone" required>
+                <input type="tel" id="phone" name="phone" required class="questionInput">
             </div>
             
             <div class="question-block">
                 <label for="city">Город:</label>
-                <select id="city" name="city" required>
+                <select id="city" name="city" required  class="questionInput">
                     <option value="Астана">Астана</option>
                     <option value="Караганда">Караганда</option>
                     <option value="Алмата">Алмата</option>
@@ -128,52 +140,30 @@
             
             <div class="question-block">
                 <label for="postcode">Почтовый индекс:</label>
-                <input type="text" id="postcode" name="postcode" required>
+                <input type="text" id="postcode" name="postcode" required  class="questionInput">
             </div>
             
             <div class="question-block">
                 <label for="address">Адрес:</label>
-                <input type="text" id="address" name="address" required>
+                <input type="text" id="address" name="address" required  class="questionInput">
             </div>
             
             <div class="question-block">
                 <label for="comment">Комментарий:</label>
-                <textarea id="comment" name="comment"></textarea>
+                <textarea id="comment" name="comment" class="questionInput"></textarea>
             </div>
-            
-            <button type="submit" id="registrationFormButton"> Оформить Заказ </button>
+            <!-- 
+                <button type="submit" id="registrationFormButton"> Оформить Заказ </button>
+            -->
         </form>
     </div>
-    <style>
-        /* Стили для блоков с вопросами */
-        .question-block {
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .question-block input, textarea{
-            align-self: center;
-            width: 90%;
-        }
-
-        /* Стили для заголовка "Оформление заказа" */
-        #registrationForm h2 {
-            align-self: center;
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-    </style>
-    
-    
 
     <button class="bottomButton" id="cartButton"> Корзина: <span id="cartSum">0</span> тг </button>
     <button class="bottomButton" id="showcaseAddToCartButton" style="display: none;"> Добавить в Корзину</button>
-    <button class="bottomButton" id="orderButton" style="display: none;"> Оформить Заказ: <span id="orderSum">0</span> тг </button>
+    <button class="bottomButton" id="registrationFormButton" style="display: none;"> Оформить Заказ: <span id="orderSum">0</span> тг </button>
+    <button class="bottomButton" id="orderButton" style="display: none;"> Подтвердить Заказ </button>
     <!-- Кнопка подтверждения заказа  
-        <button class="bottomButton" id="  " style="display: none;"> Подтвердить Заказ: </button>
+        
     -->
     <div id="cartDiv" style="display: none;"> 
         <div id="cartDivTitle">
