@@ -6,7 +6,6 @@ main.py
 .history/
 example_ReceivedData.*
 example_sentData.*
-src/images/*
 src/images/*.jpg
 src/images/*.png
 test.*
