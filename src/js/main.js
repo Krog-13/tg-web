@@ -222,13 +222,14 @@ function constractConfig(data){
     
         for(let j = 0; j < rootItem['models'].length; j++){            
             curModel = rootItem['models'][j];
+            let path = 'src/images/';
             let item = {
                 productID: curModel['id'],
                 rootIndex: i,
                 name: rootItem['name'],
                 model: curModel['model'],
                 price: curModel['price'],
-                image_src: 'src/images/' + curModel['photo_path'],
+                image_src: path + curModel['photo_path'],
                 description: rootItem['description']
             }
             
@@ -462,15 +463,14 @@ orderButton.addEventListener("click", function(){
         5 comment
     */
 
-    user_data = {
-        "delivery_type": "PlaceHolder",
-        "name" : questionDivs[0].value,
+    address = {
+        "deliver": true,
+        "username" : questionDivs[0].value,
         "phone" : questionDivs[1].value,
         "city" : questionDivs[2].value,
-        "postal_code" : questionDivs[3].value,
-        "adress" : questionDivs[4].value,
-        "comment" : questionDivs[5].value
-    };
+        "post_index" : questionDivs[3].value,
+        "address" : questionDivs[4].value,
+        "comment" : questionDivs[5].value};
 
     console.log("Init data above")
     console.log(initdata)
@@ -501,7 +501,7 @@ test_data = {"data": [{"modelID": 1, "quantity": 1}, {"modelID": 2, "quantity": 
     }
     */
 
-    data = {cart, user_data}; 
+    data = {cart, address};
     console.log(data);
 
     tg.sendData(JSON.stringify(data))
