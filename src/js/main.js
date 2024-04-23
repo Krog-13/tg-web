@@ -167,8 +167,8 @@ function catalogueDivAddItem(item){
         }
     });
 
-    hideElement(addButton);
-    hideElement(removeButton);
+    //hideElement(addButton);
+    //hideElement(removeButton);
 
     imgButton.addEventListener('click', function(){
         hideElement(document.getElementById("mainshop"));
@@ -501,7 +501,7 @@ test_data = {"data": [{"modelID": 1, "quantity": 1}, {"modelID": 2, "quantity": 
     }
     */
 
-    data = {cart, address};
+    data = {data: cart, address};
     console.log(data);
 
     tg.sendData(JSON.stringify(data))
