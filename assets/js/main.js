@@ -100,6 +100,19 @@ ManualfetchedFileData = {
                     "id": 501
                 }
             ]
+        },
+        {
+            "name": "Patric",
+            "auction": true,
+            "description": "nigger nigger nigger nigger nigger nigger",
+            "models": [
+                {
+                    "model": "star",
+                    "photo_path": "pic7.jpg",
+                    "price": 3678.0,
+                    "id": 601
+                }
+            ]
         }
     ]
 }
@@ -548,7 +561,7 @@ function catalogueDivAddItem(item){
     if(item.auction){
         var specDiv = document.createElement('div');
         specDiv.className = "dz-rating";
-        specDiv.innerHTML = "<i class=\"fa fa-star\"></i>Акция!";
+        specDiv.innerHTML = "<i class=\"fa fa-star\"></i>";//Акция!";
         itemDiv.querySelector('.dz-media').appendChild(specDiv);
         // <li class="dz-pts">${integerDivision(item.price, TICKET_PRICE)} tickets</li>
         var ticketLi = document.createElement('li');
@@ -833,7 +846,7 @@ function UpdateCartTable(){
                 </ul>
                 <div class=" d-flex align-items-center">
                     <div class="dz-stepper style-2">
-                        <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected"><span class="input-group-btn input-group-prepend"><button class="btn btn-primary bootstrap-touchspin-down bootstrap-touchspin-injected" type="button">-</button></span><input readonly="" class="stepper form-control" type="text" value="${cartItem.quantity}" name="demo3"><span class="input-group-btn input-group-append"><button class="btn btn-primary bootstrap-touchspin-up bootstrap-touchspin-injected" type="button">+</button></span></div>
+                        <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected"><span class="input-group-btn input-group-prepend"><button class="btn btn-primary bootstrap-touchspin-down bootstrap-touchspin-injected" type="button">-</button></span><input class="stepper form-control" type="text" value="${cartItem.quantity}" name="demo3"><span class="input-group-btn input-group-append"><button class="btn btn-primary bootstrap-touchspin-up bootstrap-touchspin-injected" type="button">+</button></span></div>
                     </div>
                     <a href="javascript:void(0);" class="dz-remove ms-auto"><i class="feather icon-trash-2"></i>Remove</a>
                 </div>
@@ -846,7 +859,8 @@ function UpdateCartTable(){
 
                 var ticketLi = document.createElement('li');
                 ticketLi.className = "dz-pts";
-                var count = integerDivision((product.price * product.quantity), TICKET_PRICE);
+                var count = integerDivision((product.price * cartItem.quantity), TICKET_PRICE);
+
                 var text = ((count % 10) > 4 || (count % 10) === 0) ? "билетов" : "билета";
                 if((count % 10) == 1){text = "билет"};
                 ticketLi.innerHTML = count + ' ' + text;
