@@ -241,9 +241,9 @@ let cnt = 0; // counter for map
 let cart = [] // cart that will be sended to the server (purchase info only)
 let config = []; // config data of items for showcase
 let userCity = null;
-let userDelivery = true;
+let userDelivery = false;
 let IMAGE_DIR_PATH = 'assets/images/';// 'src/images/'; // not hard to guess
-
+let TICKET_PRICE = 500;
 
 // do we need this? 
 let fetchedFileData = {"products": []};  // Data that we get
@@ -269,6 +269,50 @@ orderButton.addEventListener("click", function(){
     userPostalCode = document.getElementById('postalCode').value;
     userAddress = document.getElementById('address').value;
     userNotes = document.getElementById('notes').value;
+
+    function checkName(userName){
+        if (userName.length > 1) {
+            return userName.charAt(0).toUpperCase() + userName.slice(1).toLowerCase();
+        } else {
+            return 0;
+        }
+    }userName = checkName(userName);
+    if(!userName){
+        alert("Укажите правильное Имя!")
+        return;
+    }
+
+    function checkPhone(userPhone){
+        var numbers = userPhone.match(/\d{10}/);
+        if (numbers) {
+            //console.log(numbers[0]);
+            return '+7' + numbers[0];
+        } else {
+            //console.log("В строке нет последовательности из 10 цифр.");
+            return 0;
+        }
+    }userPhone = checkPhone(userPhone);
+    if(!userPhone){
+        alert("Укажите правильный номер!")
+        return;
+    }    
+    
+    function checkPostalCode(userPostalCode){
+        if (userPostalCode.length > 3) {
+            return userPostalCode;
+        } else {
+            return 0;
+        }
+    }userPostalCode = checkPostalCode(userPostalCode);
+    if(!userPostalCode){
+        alert("Укажите правильный Почтовый индекс!")
+        return;
+    } 
+
+    if(userCity === null){
+        alert("Выберете город!")
+        return;
+    }
 
     address = {
         "deliver": userDelivery,
@@ -352,6 +396,13 @@ function showElement(element) {
     }
 }
 
+function UpdateCartCountSpan(){
+    var count = cart.filter(cartItem => cartItem.quantity > 0).length;
+    var text = ((count % 10) > 4 || (count % 10) === 0) ? "товаров" : "товара";
+    if((count % 10) == 1){text = "товар"};
+    document.getElementById("cartCountSpan").textContent = count + ' ' + text;
+}
+
 function AuctionCatalogueDivAddItem(item){
     /*item = {
         productID: 101,
@@ -406,7 +457,7 @@ function AuctionCatalogueDivAddItem(item){
         //hideElement(document.getElementById("cartButton"));
         showElement(document.getElementById("showcase"));
         //showElement(document.getElementById("showcaseAddToCartButton"));
-
+        
         const productId = this.getAttribute('data-id');
 
         showcaseDiv.setAttribute("productId", productId);
@@ -455,6 +506,10 @@ function AuctionCatalogueDivAddItem(item){
     AuctionCatalogueDiv.appendChild(itemDiv);
 }
 
+function integerDivision(dividend, divisor) {
+    return Math.floor(dividend / divisor);
+}
+
 function catalogueDivAddItem(item){
     /*item = {
         productID: 101,
@@ -484,7 +539,6 @@ function catalogueDivAddItem(item){
                 </div>
                 <ul class="dz-meta">
                     <li class="dz-price flex-1">${item.price} <sub>тг</sub></li>
-                    <li class="dz-pts">50 Pts</li>
                 </ul>
             </div>
         </div>
@@ -496,6 +550,14 @@ function catalogueDivAddItem(item){
         specDiv.className = "dz-rating";
         specDiv.innerHTML = "<i class=\"fa fa-star\"></i>Акция!";
         itemDiv.querySelector('.dz-media').appendChild(specDiv);
+        // <li class="dz-pts">${integerDivision(item.price, TICKET_PRICE)} tickets</li>
+        var ticketLi = document.createElement('li');
+        ticketLi.className = "dz-pts";
+        var count = integerDivision(item.price, TICKET_PRICE);
+        var text = ((count % 10) > 4 || (count % 10) === 0) ? "билетов" : "билета";
+        if((count % 10) == 1){text = "билет"};
+        ticketLi.innerHTML = count + ' ' + text;
+        itemDiv.querySelector('.dz-meta').appendChild(ticketLi);
     }
     
     let imgButtons = itemDiv.getElementsByClassName("imgButton");
@@ -659,6 +721,7 @@ function getData(){
 
 function updateShowcaseSumSpan(price, quantity){
     showcaseSumSpan = document.getElementById("showcaseSumSpan");
+
     showcaseSumSpan.textContent = (price * quantity);
     //console.log(price * quantity);
 }
@@ -743,6 +806,8 @@ function UpdateCartTable(){
     let cartContent = document.getElementById("cartContent");
     cartContent.innerHTML = '';
 
+    var cartItemsCnt = 0;
+
     if(cart.some(cartItem => cartItem.quantity !== 0)){
         cart.forEach(cartItem => {
             //const product = config.find(product => product.productID === cartItem.productID);
@@ -754,6 +819,7 @@ function UpdateCartTable(){
             if(cartItem.quantity === 0){
                 return;
             }
+
             cartItemDiv.className = "dz-cart-list";
             cartItemDiv.innerHTML = `        
             <div class="dz-media">
@@ -777,6 +843,14 @@ function UpdateCartTable(){
                 var specDiv = document.createElement('i');
                 specDiv.className = "feather icon-star-on";
                 cartItemDiv.querySelector('.dz-review').appendChild(specDiv);
+
+                var ticketLi = document.createElement('li');
+                ticketLi.className = "dz-pts";
+                var count = integerDivision((product.price * product.quantity), TICKET_PRICE);
+                var text = ((count % 10) > 4 || (count % 10) === 0) ? "билетов" : "билета";
+                if((count % 10) == 1){text = "билет"};
+                ticketLi.innerHTML = count + ' ' + text;
+                cartItemDiv.querySelector('.dz-meta').appendChild(ticketLi);
             }
             //console.log(cartItemDiv.querySelector('.dz-remove'));
             
@@ -884,6 +958,8 @@ document.getElementById("showcaseAddToCartButton").addEventListener('click', fun
     const index = map[productId]; 
 
     cart[index].quantity += parseInt(document.getElementById("showcaseQuantityInput").value);
+
+    UpdateCartCountSpan();
 });
 
 function constructregionDropdown(){
