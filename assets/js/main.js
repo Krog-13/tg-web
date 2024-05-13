@@ -117,8 +117,10 @@ ManualfetchedFileData = {
     ]
 }
 
+
 const regions = {
     "Акмолинская область": [
+        "Астана",
         "Акколь",
         "Атбасар",
         "Ерейментау",
@@ -148,6 +150,7 @@ const regions = {
         "Шалкар"
     ],
     "Алматинская область": [
+        "Алмата",
         "Есик",
         "Кентау",
         "Курдай",
@@ -244,9 +247,10 @@ const regions = {
         "Сарканд",
         "Сарыагаш",
         "Тараз",
-        "Шардара"
+        "Шардара",
+        "Шымкент"
     ]
-}
+};
 
 
 let map = {} // ProductID to config index 
@@ -304,7 +308,7 @@ orderButton.addEventListener("click", function(){
             //console.log("В строке нет последовательности из 10 цифр.");
             return 0;
         }
-    }userPhone = checkPhone(userPhone);
+    }userPhone = checkPhone(userPhone.replace(/\D/g, ''));
     if(!userPhone){
         alert("Укажите правильный номер!")
         return;
@@ -374,7 +378,7 @@ test_data = {"data": [{"modelID": 1, "quantity": 1}, {"modelID": 2, "quantity": 
     tg.sendData(JSON.stringify(data))
     tg.close()
     
-    alert(data);
+    //alert(data);
     /*
     document.getElementById("shop").style.display = 'none';
 
@@ -410,7 +414,9 @@ function showElement(element) {
 }
 
 function UpdateCartCountSpan(){
-    var count = cart.filter(cartItem => cartItem.quantity > 0).length;
+    //var count = cart.filter(cartItem => cartItem.quantity > 0).length;
+    var count = cart.reduce((total, cartItem) => total + cartItem.quantity, 0);
+
     var text = ((count % 10) > 4 || (count % 10) === 0) ? "товаров" : "товара";
     if((count % 10) == 1){text = "товар"};
     document.getElementById("cartCountSpan").textContent = count + ' ' + text;
@@ -839,14 +845,14 @@ function UpdateCartTable(){
                 <img src="${product.image_src}" alt="">
             </div>
             <div class="dz-content">
-                <h6 class="title"><a href="product-detail.html">${product.name} ${product.model}</a></h6>
+                <h6 class="title"><a>${product.name} ${product.model}</a></h6>
                 <ul class="dz-meta">
-                    <li class="dz-price">${product.price} тг </li>
+                    <li class="dz-price">${product.price * cartItem.quantity} тг <sub>${product.price} тг</sub> </li>    
                     <li class="dz-review"></li>
                 </ul>
                 <div class=" d-flex align-items-center">
                     <div class="dz-stepper style-2">
-                        <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected"><span class="input-group-btn input-group-prepend"><button class="btn btn-primary bootstrap-touchspin-down bootstrap-touchspin-injected" type="button">-</button></span><input class="stepper form-control" type="text" value="${cartItem.quantity}" name="demo3"><span class="input-group-btn input-group-append"><button class="btn btn-primary bootstrap-touchspin-up bootstrap-touchspin-injected" type="button">+</button></span></div>
+                        <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected"><span class="input-group-btn input-group-prepend"><button class="btn btn-primary bootstrap-touchspin-down bootstrap-touchspin-injected" type="button">-</button></span><input class="stepper form-control" type="text" value="${cartItem.quantity}" name="demo3"><span class="input-group-btn input-group-append"><button class="btn btn-primary bootstrap-touchspin-up bootstrap-touchspin-injected" type="button">+</button></span> </div>
                     </div>
                     <a href="javascript:void(0);" class="dz-remove ms-auto"><i class="feather icon-trash-2"></i>Remove</a>
                 </div>
@@ -989,7 +995,7 @@ function constructregionDropdown(){
             citySelectorDiv.innerHTML = '';
             let curRegion = this.getAttribute('data-region');
             document.getElementById("selectedRegion").textContent = curRegion;
-            regions[curRegion].forEach(city => {
+            regions[curRegion].sort().forEach(city => {
                 let cityA = document.createElement('a');
                 cityA.className = "dropdown-item";
                 cityA.textContent = city;
